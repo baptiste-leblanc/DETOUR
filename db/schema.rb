@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_25_121655) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_25_145057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,55 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_25_121655) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.string "full_address"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "itineraries", force: :cascade do |t|
+    t.integer "duration"
+    t.string "theme"
+    t.bigint "itinerary_objective_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["itinerary_objective_id"], name: "index_itineraries_on_itinerary_objective_id"
+  end
+
+  create_table "itinerary_objectives", force: :cascade do |t|
+    t.string "name"
+    t.bigint "departure_address_id", null: false
+    t.bigint "arrival_address_id", null: false
+    t.integer "duration_objective"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrival_address_id"], name: "index_itinerary_objectives_on_arrival_address_id"
+    t.index ["departure_address_id"], name: "index_itinerary_objectives_on_departure_address_id"
+    t.index ["user_id"], name: "index_itinerary_objectives_on_user_id"
+  end
+
+  create_table "itinerary_point_of_interests", force: :cascade do |t|
+    t.bigint "itinerary_id", null: false
+    t.bigint "point_of_interest_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["itinerary_id"], name: "index_itinerary_point_of_interests_on_itinerary_id"
+    t.index ["point_of_interest_id"], name: "index_itinerary_point_of_interests_on_point_of_interest_id"
+  end
+
+  create_table "point_of_interests", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.string "category"
+    t.bigint "address_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_point_of_interests_on_address_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -56,4 +105,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_25_121655) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "itineraries", "itinerary_objectives"
+  add_foreign_key "itinerary_objectives", "addresses", column: "arrival_address_id"
+  add_foreign_key "itinerary_objectives", "addresses", column: "departure_address_id"
+  add_foreign_key "itinerary_objectives", "users"
+  add_foreign_key "itinerary_point_of_interests", "itineraries"
+  add_foreign_key "itinerary_point_of_interests", "point_of_interests"
+  add_foreign_key "point_of_interests", "addresses"
 end
