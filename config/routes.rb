@@ -9,4 +9,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get "webmanifest"    => "pwa#manifest"
+  get "service-worker" => "pwa#service_worker"
 end
