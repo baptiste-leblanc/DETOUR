@@ -8,7 +8,7 @@
     <%= tag.link rel: "icon", href: image_url("logo.png"), type: "image/png" %>
     <%= tag.link rel: "apple-touch-icon", href: image_url("logo.png") %>
 
-<%= csrf_meta_tags %>
+    <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -30,6 +30,7 @@
           <% end %>
       <% end %>
           <%= yield %>
+
         </div>
       </div>
     </div>
