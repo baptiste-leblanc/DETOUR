@@ -22,8 +22,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_challenges
-    @challenges = Challenge.all
+  def set_itineraries
+    @itineraries = Itinerary.all
   end
 
 end
