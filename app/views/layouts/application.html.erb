@@ -19,14 +19,14 @@
     <div class="container-fluid">
       <% if user_signed_in? %>
       <div class="row" data-controller="toggle">
-        <nav class="d-none col-9 sidebar pt-3 bg-white h-100 position-absolute z-3" data-toggle-target="hideable" style="transition: transform 0.3s ease-in-out">
+        <nav class="col-md-2 sidebar pt-3" data-toggle-target="hideable">
           <%= render "shared/sidenav", itineraries: @itineraries %>
         </nav>
-        <div class="col-3 my-4">
+        <div class="col-md-10 my-4">
           <%= render "shared/flashes" %>
-          <%= link_to "#", class: "nav-link text-dark",
+          <%= link_to "#", class: "d-none nav-link text-dark",
                     data: {action: "click->toggle#call", toggle_target: "show"} do %>
-          <i class="fa-solid fa-bars z-3"></i>
+          <i class="fa-solid fa-bars"></i>
           <% end %>
       <% end %>
           <%= yield %>

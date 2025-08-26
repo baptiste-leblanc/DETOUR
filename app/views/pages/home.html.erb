@@ -1,6 +1,9 @@
 <style>
   body { margin:0; padding:0; }
-  #map { padding:0; width:100%; height:100vh; }
+  #map {position:fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%; z-index:2}
 </style>
 
 <div id="map"></div>
@@ -8,24 +11,24 @@
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = "pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ";
+  mapboxgl.accessToken = "pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ";
 
-    const map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [2.3522, 48.8566],
-      zoom: 12
-    });
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: [2.3522, 48.8566],
+    zoom: 12
+  });
 
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true,
-      showUserHeading: true
-    });
+  const geolocate = new mapboxgl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: true,
+    showUserHeading: true
+  });
 
-    map.addControl(geolocate);
+  map.addControl(geolocate);
 
-    map.on("load", () => {
-      geolocate.trigger();
-    });
-  </script>
+  map.on("load", () => {
+    geolocate.trigger();
+  });
+</script>
