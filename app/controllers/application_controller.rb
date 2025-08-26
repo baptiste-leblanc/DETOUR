@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   include Pundit::Authorization
+  before_action :set_itineraries
 
   # Pundit: allow-list approach
   after_action :verify_authorized, except: :index, unless: :skip_pundit?
@@ -18,4 +19,11 @@ class ApplicationController < ActionController::Base
   def skip_pundit?
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|(pwa)/
   end
+
+  private
+
+  def set_challenges
+    @challenges = Challenge.all
+  end
+
 end

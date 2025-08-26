@@ -15,9 +15,22 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body><%= render "shared/navbar" %>
-<%= render "shared/flashes" %>
-
-    <%= yield %>
+  <body>
+  <%= render "shared/navbar" %>
+  <div class="container-fluid">
+    <div class="row" data-controller="toggle">
+      <nav class="col-md-2 sidebar pt-3" data-toggle-target="hideable">
+        <%= render "shared/sidenav", itineraries: @itineraries %>
+      </nav>
+      <div class="col-md-10 my-4">
+        <%= render "shared/flashes" %>
+        <%= link_to "#", class: "d-none nav-link text-dark",
+                  data: {action: "click->toggle#call", toggle_target: "show"} do %>
+        <i class="fa-regular fa-square-caret-right"></i>
+        <% end %>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
   </body>
 </html>
