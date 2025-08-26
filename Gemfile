@@ -57,6 +57,8 @@ gem "cloudinary"
 
 # Gemfile
 gem "pundit"
+gem "ruby_llm"
+gem "geocoder"
 
 group :development, :test do
   gem "dotenv-rails"
