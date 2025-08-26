@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   get "webmanifest"    => "pwa#manifest"
   get "service-worker" => "pwa#service_worker"
+
+  resources :itinerary_objectives, only: [:edit, :update]
 end
