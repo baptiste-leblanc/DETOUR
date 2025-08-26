@@ -25,5 +25,4 @@ class ApplicationController < ActionController::Base
   def set_challenges
     @challenges = Challenge.all
   end
-
 end
