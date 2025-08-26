@@ -9,19 +9,15 @@
 #   end
 
 # destroy_all
-User.destroy_all
-Address.destroy_all
+ItineraryPointOfInterest.destroy_all
 Itinerary.destroy_all
 ItineraryObjective.destroy_all
-ItineraryPointOfInterest.destroy_all
-PointOfInterest.destroy_all
+User.destroy_all
+# Address.destroy_all
+# PointOfInterest.destroy_all
 
 # Users
-# user = User.new(email: "test@test.com", password: "password")
-user1 = User.create!(email: "marie.audrey@yopmail.com", password: "password123")
-# user1.save
-# user2 = User.create!(email: "jon.snow@example.com", password: "secure456")
-# user2.save
+user1 = User.create!(email: "test@test.com", password: "password")
 puts 'Users created'
 
 # Addresses
@@ -40,21 +36,21 @@ objective1 = ItineraryObjective.create!(
   departure_address_id: addr_louvre.id,
   arrival_address_id: addr_rivoli.id,
   duration_objective: 1800,   # 30 minutes
-  user_id: user1.id
+  user_id: User.first.id
 )
 objective2 = ItineraryObjective.create!(
   name: "Tour express Tour Eiffel",
   departure_address_id: addr_invalides.id,
   arrival_address_id: addr_toureiffel.id,
   duration_objective: 3600,   # 1h
-  user_id: user1.id
+  user_id: User.first.id
 )
 objective3 = ItineraryObjective.create!(
   name: "Promenade Montmartre",
   departure_address_id: addr_wagon.id,
   arrival_address_id: addr_montmartre.id,
   duration_objective: 2700,   # 45 min
-  user_id: user1.id
+  user_id: User.first.id
 )
 puts 'Itinerary objectives created'
 
