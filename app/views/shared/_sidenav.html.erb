@@ -1,1 +1,15 @@
 <%# A updater par Mélanie %>
+<ul class="position-sticky sticky-top nav flex-column">
+  <li class="nav-item">
+    <%= link_to "#", class: "nav-link text-dark", data: { action: "click->toggle#call" } do %>
+      <i class="fa-regular fa-square-caret-left"></i>
+    <% end %>
+  </li>
+  <% itineraries.each do |itinerary| %>
+    <li class="nav-item">
+      <!-- <%= link_to itinerary.theme, itinerary_path(itinerary), class: "nav-link text-dark" %> -->
+      <!-- <%= link_to "#", "User itinerary history", class: "nav-link text-dark" %> -->
+      <p>User itinerary history</p>
+    </li>
+  <% end %>
+</ul>
