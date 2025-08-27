@@ -9,11 +9,12 @@ export default class extends Controller {
       this.hideableTarget.classList.remove("z-n1")
       this.hideableTarget.classList.remove("opacity-0")
       this.hideableTarget.classList.add("z-3")
-      // this.showTarget.classList.add("opacity-100")
+      this.showTarget.classList.add("opacity-100")
     } else {
       this.hideableTarget.classList.add("opacity-0")
       this.hideableTarget.classList.add("z-n1")
-      // this.showTarget.classList.remove("opacity-100")
+      this.hideableTarget.classList.remove("z-3")
+      this.showTarget.classList.remove("opacity-100")
     }
   }
 }
