@@ -1,11 +1,16 @@
 class ItineraryObjectivesController < ApplicationController
   def edit
-    @address = address.find(address_params)
-    @address.save
+    @address = Address.find(params[:id])
   end
 
   def update
-    @address = address.find(address_params)
+    @address = Address.find(params[:id])
+
+    if @address.update(address_params)
+      redirect_to @address
+    else
+      render :edit
+    end
   end
 
   private
