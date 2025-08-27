@@ -9,12 +9,6 @@
       <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}, class:"d-none"},
       wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
     <% end %>
-    <%= f.input :name,
-    as: :radio_buttons,
-    collection: [["10 min"], ["30 min"], ["Make me walk"]],
-    item_wrapper_class: "form-check form-check-inline",
-    item_label_class: "form-check-label",
-    input_html: { class: "form-check-input" } %>
 
     <%= f.submit %>
   <% end %>
