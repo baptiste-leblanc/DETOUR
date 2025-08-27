@@ -14,11 +14,6 @@
 @import "pages/index";
 @import "pages/login";
 @import "pages/signup";
+@import "pages/address_autocomplete";
+@import "pages/radius_buttons"
 
-.fa-solid {
-  position:relative;
-  z-index:3;
-  background-color: white;
-  padding:5px;
-  border-radius:1px
-}

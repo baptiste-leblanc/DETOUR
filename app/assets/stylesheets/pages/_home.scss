@@ -48,3 +48,12 @@ body {
   width: 90%;
   max-width: 400px;
 }
+
+// relative au background du sandwitch menu sur la landing page
+.fa-solid {
+  position:relative;
+  z-index:3;
+  background-color: white;
+  padding:5px;
+  border-radius:1px
+}
