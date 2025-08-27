@@ -1,34 +1,45 @@
-<style>
-  body { margin:0; padding:0; }
-  #map {position:fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%; z-index:2}
-</style>
+<div style="position:relative;z-index:2">
+  <%= simple_form_for @itinerary_objective do |f| %>
+    <%= f.simple_fields_for :departure_address, Address.new do |g| %>
+      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}, class:"d-none"},
+      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
+    <% end %>
 
-<div id="map"></div>
+    <%= f.simple_fields_for :arrival_address, Address.new do |g| %>
+      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}, class:"d-none"},
+      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
+    <% end %>
 
+<div>
+    <div class="radio-buttons">
+      <input type="radio" id="option1" name="choice" value="1">
+      <label for="option1" class="shadow-sm">
+        <span class="main-text">Direct</span>
+      </label>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-<script>
-  mapboxgl.accessToken = "pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ";
+      <input type="radio" id="option2" name="choice" value="2">
+      <label for="option2" class="shadow-sm">
+        <span class="main-text">Short Detour</span>
+        <br>
+        <span class="sub-text">max 10 minutes</span>
+      </label>
 
-  const map = new mapboxgl.Map({
-    container: "map",
-    style: "mapbox://styles/mapbox/streets-v11",
-    center: [2.3522, 48.8566],
-    zoom: 12
-  });
+      <input type="radio" id="option3" name="choice" value="3">
+      <label for="option3" class="shadow-sm">
+        <span class="main-text">Long Detour</span>
+        <br>
+        <span class="sub-text">max 20 minutes</span>
+      </label>
 
-  const geolocate = new mapboxgl.GeolocateControl({
-    positionOptions: { enableHighAccuracy: true },
-    trackUserLocation: true,
-    showUserHeading: true
-  });
+      <input type="radio" id="option4" name="choice" value="4">
+      <label for="option4" class="shadow-sm">
+        <span class="main-text">Long scroll</span>
+      </label>
+    </div>
+</div>
 
-  map.addControl(geolocate);
+    <%= f.submit %>
+  <% end %>
+</div>
 
-  map.on("load", () => {
-    geolocate.trigger();
-  });
-</script>
+<%= render "shared/map" %>
