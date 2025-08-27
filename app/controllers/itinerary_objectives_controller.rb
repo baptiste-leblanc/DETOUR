@@ -132,10 +132,10 @@ class ItineraryObjectivesController < ApplicationController
   area_for_POIs = corridor_polygon(start_lat, start_lon, end_lat, end_lon)
 # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
   # PROMPT A CHANGER PAR MELANIE
-  prompt =  "The data related to the geographical rectangle are the following : #{area_for_POIs}"
+  prompt =  "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
 # PROMPT A CHANGER PAR MELANIE
   response = chat.with_instructions(system_prompt).ask(prompt)
-  pois = JSON.parse(response.content)["point_of_interest"]
+  pois = JSON.parse(response.content)["points_of_interest"]
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
   filtered_pois = pois.select do |poi|
     lat = poi["location"]["latitude"]
