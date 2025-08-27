@@ -1,24 +1,46 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
 
+  def create
+    @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+    @itinerary_objective.user = current_user
+    authorize(@itinerary_objective)
+
+    if @itinerary_objective.save
+      redirect_to edit_itinerary_objective_path(@itinerary_objective), notice: "Done"
+    else
+      redirect_to itinerary_objective_path, alert: "Error"
+    end
+  end
+
   def edit
-    @address = address.find(address_params)
-    @address.save
+    @itinerary_objective = ItineraryObjective.find(params[:id])
+    authorize @itinerary_objective
   end
 
   def update
-    @address = address.find(address_params)
+    @itinerary_objective = ItineraryObjective.find(params[:id])
+    authorize @itinerary_objective
+
+
+    if @itinerary_objective.update(address_params)
+      redirect_to @itinerary_objective
+    else
+      render :edit
+    end
   end
 
   private
 
-  def address_params
-    params.require(:address).permit(:longitude, :latitude)
+  def itinerary_objective_params
+    params.require(:itinerary_objective).permit(
+      departure_address_attributes: [:id, :full_address],
+      arrival_address_attributes: [:id, :full_address]
+    )
   end
 
-  # Code permettant de générer une zone de points d'intérêts
-
-  # Conversion degrés ↔ radians
+# Code permettant de générer une zone de points d'intérêts
+# Conversion degrés ↔ radians
   def deg2rad(deg)
     deg * Math::PI / 180
   end
@@ -77,6 +99,7 @@ class ItineraryObjectivesController < ApplicationController
       },
       properties: {}
     }
+
   end
 
   def point_in_polygon?(point, polygon)
