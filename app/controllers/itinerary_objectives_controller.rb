@@ -1,4 +1,13 @@
 class ItineraryObjectivesController < ApplicationController
+  def create
+    @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+    if @itinerary_objective.save
+      redirect_to itinerary_objective_path, notice: "Done"
+    else
+      redirect_to itinerary_objective_path, alert: "Error"
+    end
+  end
+
   def edit
     @itinerary_objective = ItineraryObjective.find(params[:id])
     authorize @itinerary_objective
@@ -81,5 +90,6 @@ class ItineraryObjectivesController < ApplicationController
       },
       properties: {}
     }
+
   end
 end
