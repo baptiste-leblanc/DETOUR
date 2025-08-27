@@ -12,6 +12,10 @@ class ItineraryObjectivePolicy < ApplicationPolicy
     # end
   end
 
+  def create?
+    true
+  end
+
   def edit?
     update?
   end

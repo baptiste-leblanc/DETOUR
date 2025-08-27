@@ -1,15 +1,16 @@
-<div class="form-div z-2">
+<div style="position:relative;z-index:4">
   <%= simple_form_for @itinerary_objective do |f| %>
-    <div class="d-flex" style="gap: 0;">
-      <%= f.input :name,
-          placeholder: "Enter destination...",
-          required: true,
-          label: false,
-          wrapper: false,
-          input_html: { class: "flex-grow-1 form-control rounded-end" } %>
+    <%= f.simple_fields_for :departure_address, Address.new do |g| %>
+      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}},
+      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }} %>
+    <% end %>
 
-      <%= f.button :submit, '➜', class: 'btn btn-dark rounded-start' %>
-    </div>
+    <%= f.simple_fields_for :arrival_address, Address.new do |g| %>
+      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}},
+      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }} %>
+    <% end %>
+
+    <%= f.submit %>
   <% end %>
 </div>
 
