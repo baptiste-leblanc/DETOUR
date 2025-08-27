@@ -1,17 +1,7 @@
-<style>
-  body { margin:0; padding:0; }
-  #map {position:fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%; z-index:2}
-</style>
-
-<div>
+<div class="form-div z-2" style="">
   <%= simple_form_for @itinerary_objective do |f| %>
-    <%= f.input :itinerary_objective,
-    input_html: { data: {address_autocomplete_target: "full_address"} },
-    wrapper_html: { data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ"]} } %>
-    <%= f.button :submit, 'Submit', class: 'btn btn-primary' %>
+    <%= f.input :name, placeholder: "Enter destination", required: true, label: false %>
+    <%= f.button :submit, '➜', class: 'btn btn-dark' %>
   <% end %>
 </div>
 
