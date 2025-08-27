@@ -15,14 +15,26 @@ body {
 .form-div {
   position:relative;
   z-index:3;
-  width:200px;
-  margin-top:-5vh;
-  margin-right:auto;
-  margin-left:auto
+  margin:-5vh auto;
 }
 
 .btn .btn-dark {
-  position:relative;
-  margin-right:10vw;
-  border-radius: 100px;
+  border-radius: 50%;
+  // padding: 10px 10px;
+  width:50px;
+}
+
+.form-div form {
+  display: flex;
+  align-items: stretch;
+  width:100px;
+  margin:0 15vw
+}
+
+.form-div .form-control {
+  flex: row;
+  width:200px;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid #ccc;
+  padding: 8px;
 }
