@@ -1,6 +1,9 @@
 class ItineraryObjectivesController < ApplicationController
   def create
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+    @itinerary_objective.user = current_user
+    authorize(@itinerary_objective)
+
     if @itinerary_objective.save
       redirect_to edit_itinerary_objective_path(@itinerary_objective), notice: "Done"
     else
