@@ -8,6 +8,8 @@ class ItineraryObjectivesController < ApplicationController
     end
   end
 
+  def 
+
   def edit
     @address = Address.find(address_params)
     @address.save
@@ -19,11 +21,10 @@ class ItineraryObjectivesController < ApplicationController
 
   private
 
-  def address_params
-    params.require(:address).permit(:longitude, :latitude)
-  end
-
   def itinerary_objective_params
-    params.require(:itinerary_objective).permit(:address)
+    params.require(:itinerary_objective).permit(
+      departure_address_attributes: [:id, :full_address],
+      arrival_address_attributes: [:id, :full_address]
+    )
   end
 end
