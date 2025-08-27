@@ -1,34 +1,16 @@
-<style>
-  body { margin:0; padding:0; }
-  #map {position:fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%; z-index:2}
-</style>
+<div class="form-div z-2">
+  <%= simple_form_for @itinerary_objective do |f| %>
+    <div class="d-flex" style="gap: 0;">
+      <%= f.input :name,
+          placeholder: "Enter destination...",
+          required: true,
+          label: false,
+          wrapper: false,
+          input_html: { class: "flex-grow-1 form-control rounded-end" } %>
 
-<div id="map"></div>
+      <%= f.button :submit, '➜', class: 'btn btn-dark rounded-start' %>
+    </div>
+  <% end %>
+</div>
 
-
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-<script>
-  mapboxgl.accessToken = "pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ";
-
-  const map = new mapboxgl.Map({
-    container: "map",
-    style: "mapbox://styles/mapbox/streets-v11",
-    center: [2.3522, 48.8566],
-    zoom: 12
-  });
-
-  const geolocate = new mapboxgl.GeolocateControl({
-    positionOptions: { enableHighAccuracy: true },
-    trackUserLocation: true,
-    showUserHeading: true
-  });
-
-  map.addControl(geolocate);
-
-  map.on("load", () => {
-    geolocate.trigger();
-  });
-</script>
+<%= render "shared/map" %>

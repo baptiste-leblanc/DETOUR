@@ -1,11 +1,20 @@
 class ItineraryObjectivesController < ApplicationController
+  def create
+    @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+    if @itinerary_objective.save
+      redirect_to itinerary_objective_path, notice: "Done"
+    else
+      redirect_to itinerary_objective_path, alert: "Error"
+    end
+  end
+
   def edit
-    @address = address.find(address_params)
+    @address = Address.find(address_params)
     @address.save
   end
 
   def update
-    @address = address.find(address_params)
+    @address = Address.find(address_params)
   end
 
   private
@@ -73,5 +82,6 @@ class ItineraryObjectivesController < ApplicationController
       },
       properties: {}
     }
+    
   end
 end
