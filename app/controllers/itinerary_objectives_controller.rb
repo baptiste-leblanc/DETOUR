@@ -1,8 +1,11 @@
 class ItineraryObjectivesController < ApplicationController
   def create
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+    @itinerary_objective.user = current_user
+    authorize(@itinerary_objective)
+
     if @itinerary_objective.save
-      redirect_to itinerary_objective_path, notice: "Done"
+      redirect_to edit_itinerary_objective_path(@itinerary_objective), notice: "Done"
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
@@ -27,8 +30,11 @@ class ItineraryObjectivesController < ApplicationController
 
   private
 
-  def address_params
-    params.require(:address).permit(:longitude, :latitude)
+  def itinerary_objective_params
+    params.require(:itinerary_objective).permit(
+      departure_address_attributes: [:id, :full_address],
+      arrival_address_attributes: [:id, :full_address]
+    )
   end
 
   # Conversion degrés ↔ radians
