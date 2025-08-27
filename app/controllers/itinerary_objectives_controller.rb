@@ -1,13 +1,16 @@
 class ItineraryObjectivesController < ApplicationController
   def edit
-    @address = Address.find(params[:id])
+    @itinerary_objective = ItineraryObjective.find(params[:id])
+    authorize @itinerary_objective
   end
 
   def update
-    @address = Address.find(params[:id])
+    @itinerary_objective = ItineraryObjective.find(params[:id])
+    authorize @itinerary_objective
 
-    if @address.update(address_params)
-      redirect_to @address
+
+    if @itinerary_objective.update(address_params)
+      redirect_to @itinerary_objective
     else
       render :edit
     end
@@ -19,7 +22,7 @@ class ItineraryObjectivesController < ApplicationController
     params.require(:address).permit(:longitude, :latitude)
   end
 
-# Conversion degrés ↔ radians
+  # Conversion degrés ↔ radians
   def deg2rad(deg)
     deg * Math::PI / 180
   end
