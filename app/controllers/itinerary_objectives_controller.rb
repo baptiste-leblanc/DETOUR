@@ -1,5 +1,6 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
+  require "uri"
 
   def edit
     @address = address.find(address_params)
@@ -16,7 +17,7 @@ class ItineraryObjectivesController < ApplicationController
     params.require(:address).permit(:longitude, :latitude)
   end
 
-  # Code permettant de générer une zone de points d'intérêts
+  # START: Code permettant de générer une zone de points d'intérêts
 
   # Conversion degrés ↔ radians
   def deg2rad(deg)
@@ -99,7 +100,6 @@ class ItineraryObjectivesController < ApplicationController
 
   def generate_POIs(start_lat, start_lon, end_lat, end_lon)
     chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
-# SYSTEME PROMPT A CHANGER PAR MELANIE
     system_prompt = <<~PROMPT
       Role:
       You are a guide that provides points of interest (POIs) located strictly inside a geographical area defined by Mapbox.
@@ -128,12 +128,9 @@ class ItineraryObjectivesController < ApplicationController
       - "points_of_interest" must be an array of POI objects.
       - Do not include any additional keys, metadata, explanations, or text before/after the JSON.
   PROMPT
-# SYSTEME PROMPT A CHANGER PAR MELANIE
   area_for_POIs = corridor_polygon(start_lat, start_lon, end_lat, end_lon)
 # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
-  # PROMPT A CHANGER PAR MELANIE
   prompt =  "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
-# PROMPT A CHANGER PAR MELANIE
   response = chat.with_instructions(system_prompt).ask(prompt)
   pois = JSON.parse(response.content)["points_of_interest"]
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
@@ -143,4 +140,19 @@ class ItineraryObjectivesController < ApplicationController
     point_in_polygon?([lon, lat], polygon)
     end
   end
+
+  # END: Code permettant de générer une zone de points d'intérêts
+  def order_waypoints(start_lat, start_lon, end_lat, end_lon, filtered_pois)
+    url =
+    filtered_pois.each do |poi|
+     url = "https://api.mapbox.com/optimized-trips/v1/mapbox/walking/#{start_lat},?access_token=pk.eyJ1IjoidWJhcSIsImEiOiJjbWRwdWV3aXUwZGdyMmtxdzE3ZHB4YjU2In0.Y_ue11FiRja43Jm78jwPvA&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
+    end
+    url = "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/2.3469%2C48.8609%3B2.3522%2C48.8719%3B2.350867%2C48.866582%3B2.370867%2C48.876582?access_token=pk.eyJ1IjoidWJhcSIsImEiOiJjbWRwdWV3aXUwZGdyMmtxdzE3ZHB4YjU2In0.Y_ue11FiRja43Jm78jwPvA&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
+    ordered_pois_serialized = URI.parse(url).read
+    ordered_pois = JSON.parse(ordered_pois_serialized)
+  end
+
+
+
+
 end
