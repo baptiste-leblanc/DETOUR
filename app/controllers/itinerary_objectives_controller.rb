@@ -12,23 +12,28 @@ class ItineraryObjectivesController < ApplicationController
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
+
+    pois = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+    pois.each do |poi|
+      Point_of_interest.create(name: poi.name)
+    raise
   end
 
-  def edit
-    @itinerary_objective = ItineraryObjective.find(params[:id])
-    authorize @itinerary_objective
-  end
+  # def edit
+  #   @itinerary_objective = ItineraryObjective.find(params[:id])
+  #   authorize @itinerary_objective
+  # end
 
-  def update
-    @itinerary_objective = ItineraryObjective.find(params[:id])
-    authorize @itinerary_objective
+  # def update
+  #   @itinerary_objective = ItineraryObjective.find(params[:id])
+  #   authorize @itinerary_objective
 
 
-    if @itinerary_objective.update(address_params)
-      redirect_to @itinerary_objective
-    else
-      render :edit
-    end
+  #   if @itinerary_objective.update(address_params)
+  #     redirect_to @itinerary_objective
+  #   else
+  #     render :edit
+  #   end
   end
 
   private
@@ -175,8 +180,3 @@ class ItineraryObjectivesController < ApplicationController
     ordered_pois_serialized = URI.parse(url).read
     ordered_pois = JSON.parse(ordered_pois_serialized)
   end
-
-
-
-
-end
