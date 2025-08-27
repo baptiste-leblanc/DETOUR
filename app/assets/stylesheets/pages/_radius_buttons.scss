@@ -1,0 +1,38 @@
+.radio-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  width: 250px;
+  height: 75px;
+  padding: 12px 24px;
+  background: linear-gradient(145deg, #ffffff, #ffffff);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+input[type="radio"]:checked + label {
+  background: linear-gradient(145deg, #000000, #000000);
+  color: white;
+  box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
+}
+
+.main-text {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.sub-text {
+  font-size: 0.8em;
+  color: #3b3b3b;
+  font-weight: 300;
+}
