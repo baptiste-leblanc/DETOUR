@@ -97,20 +97,20 @@ poi_eiffel = PointOfInterest.create!(
   category: "Monument"
 )
 
-# poi_montmartre = PointOfInterest.create!(
-#   name: "Sacré-Cœur",
-#   address_id: addr_montmartre.id,
-#   description: "Vue panoramique sur Paris",
-#   category: "Monument"
-# )
+poi_montmartre = PointOfInterest.create!(
+  name: "Sacré-Cœur",
+  address_id: addr_montmartre.id,
+  description: "Vue panoramique sur Paris",
+  category: "Monument"
+)
 
-# poi_luxembourg = PointOfInterest.create!(
-#   name: "Jardin du Luxembourg",
-#   address_id: addr_luxembourg.id,
-#   description: "Un havre de verdure au cœur de Paris",
-#   category: "Nature"
-# )
-# puts 'Points of interests created'
+poi_luxembourg = PointOfInterest.create!(
+  name: "Jardin du Luxembourg",
+  address_id: addr_luxembourg.id,
+  description: "Un havre de verdure au cœur de Paris",
+  category: "Nature"
+)
+puts 'Points of interests created'
 
 # --- Jointures (Itinerary ↔ POI) ---
 # Itinéraire 1 : Louvre + Notre-Dame (30 min)
@@ -121,6 +121,6 @@ ItineraryPointOfInterest.create!(itinerary_id: itinerary1.id, point_of_interest_
 ItineraryPointOfInterest.create!(itinerary_id: itinerary2.id, point_of_interest_id: poi_eiffel.id)
 
 # Itinéraire 3 : Montmartre + Jardin du Luxembourg (45 min)
-# ItineraryPointOfInterest.create!(itinerary_id: itinerary3.id, point_of_interest_id: poi_montmartre.id)
-# ItineraryPointOfInterest.create!(itinerary_id: itinerary3.id, point_of_interest_id: poi_luxembourg.id)
+ItineraryPointOfInterest.create!(itinerary_id: itinerary3.id, point_of_interest_id: poi_montmartre.id)
+ItineraryPointOfInterest.create!(itinerary_id: itinerary3.id, point_of_interest_id: poi_luxembourg.id)
 puts 'Itinerary - POI joints created'
