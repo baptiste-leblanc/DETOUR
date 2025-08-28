@@ -13,12 +13,12 @@
 <div class="mb-3">
     <div class="radio-buttons">
       <input type="radio" id="option1" name="choice" value="1">
-      <label for="option1" class="shadow-sm d-flex align-items-center justify-content-center">
+      <label for="option1" class="shadow-sm d-flex align-items-center justify-content-center direct">
         <span class="main-text">Direct</span>
       </label>
 
       <input type="radio" id="option2" name="choice" value="2">
-      <label for="option2" class="shadow-sm d-flex align-items-center justify-content-center">
+      <label for="option2" class="shadow-sm d-flex align-items-center justify-content-center max-10">
         <div>
           <span class="main-text">Short Detour</span>
             <br>
@@ -27,7 +27,7 @@
       </label>
 
       <input type="radio" id="option3" name="choice" value="3">
-      <label for="option3" class="shadow-sm d-flex align-items-center justify-content-center">
+      <label for="option3" class="shadow-sm d-flex align-items-center justify-content-center max-20">
         <div>
           <span class="main-text">Long Detour</span>
             <br>
@@ -36,13 +36,13 @@
       </label>
 
       <input type="radio" id="option4" name="choice" value="4">
-      <label for="option4" class="shadow-sm d-flex align-items-center justify-content-center">
-        <span class="main-text">Long scroll</span>
+      <label for="option4" class="shadow-sm d-flex align-items-center justify-content-center long-scroll">
+        <span class="main-text">Long Scroll</span>
       </label>
     </div>
 </div>
 
-    <%= f.submit %>
+    <%= f.submit "Valider", class: "btn btn-primary" %>
   <% end %>
 </div>
 

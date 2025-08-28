@@ -12,17 +12,25 @@ input[type="radio"] + label {
   width: 100%;
   height: 75px;
   padding: 12px 24px;
-  background: linear-gradient(145deg, #ffffff, #ffffff);
-  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
 }
 
+label:hover {
+  color:white;
+  background: #000000;
+  border: 1px solid #f5d8ee;
+
+  .sub-text {
+      color: #f5d8ee;
+  }
+}
+
 input[type="radio"]:checked + label {
-  background: linear-gradient(145deg, #000000, #000000);
-  color: white;
+  background:#000000;
+  color: rgb(245, 175, 12);
   box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
 }
 
@@ -33,6 +41,169 @@ input[type="radio"]:checked + label {
 
 .sub-text {
   font-size: 0.8em;
-  color: #3b3b3b;
+  color: #515151;
   font-weight: 300;
 }
+
+.direct {
+ background: white;
+ border: 1px solid black;
+}
+
+.max-10 {
+background: #f5d8ee;
+border: 1px solid black;
+}
+
+.max-20 {
+background: #bc8dc4;
+border: 1px solid black;
+}
+
+.long-scroll {
+  color: #ffffff;
+  border: 1px solid black;
+  background: #161273;
+}
+
+
+
+
+
+//   // Styles pour les boutons radio personnalisés
+//   .radio-buttons {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr;
+//     gap: 10px;
+
+//     input[type="radio"] {
+//       display: none;
+//     }
+
+//     .radio-label {
+//       padding: 15px;
+//       border: 2px solid #e9ecef;
+//       border-radius: 10px;
+//       cursor: pointer;
+//       transition: all 0.3s ease;
+//       background: white;
+//       text-align: center;
+//       min-height: 70px;
+
+//       &:hover {
+//         border-color: #80bdff;
+//         transform: translateY(-2px);
+//       }
+
+//       .main-text {
+//         font-weight: 600;
+//         color: #495057;
+//         font-size: 0.95rem;
+//       }
+
+//       .sub-text {
+//         font-size: 0.8rem;
+//         color: #6c757d;
+//         margin-top: 2px;
+//       }
+//     }
+
+//     // État sélectionné
+//     input[type="radio"]:checked + .radio-label {
+//       border-color: #007bff;
+//       background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+//       color: white;
+
+//       .main-text {
+//         color: white;
+//       }
+
+//       .sub-text {
+//         color: rgba(255, 255, 255, 0.8);
+//       }
+//     }
+//   }
+
+//   .btn {
+//     transition: all 0.3s ease;
+//     border-radius: 10px;
+//     font-weight: 600;
+//     text-transform: uppercase;
+//     letter-spacing: 0.5px;
+
+//     &:hover {
+//       transform: translateY(-2px);
+//       box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
+//     }
+
+//     &:active {
+//       transform: translateY(0);
+//     }
+//   }
+
+//   // Animation au chargement
+//   .form-group {
+//     opacity: 0;
+//     animation: slideInUp 0.6s ease forwards;
+
+//     &:nth-child(1) { animation-delay: 0.1s; }
+//     &:nth-child(2) { animation-delay: 0.2s; }
+//     &:nth-child(3) { animation-delay: 0.3s; }
+//     &:nth-child(4) { animation-delay: 0.4s; }
+//   }
+
+// // Animation de chargement
+// @keyframes slideInUp {
+//   from {
+//     opacity: 0;
+//     transform: translateY(30px);
+//   }
+//   to {
+//     opacity: 1;
+//     transform: translateY(0);
+//   }
+// }
+
+// // Style pour l'autocomplétion
+// .address-autocomplete-dropdown {
+//   position: absolute;
+//   top: 100%;
+//   left: 0;
+//   right: 0;
+//   z-index: 1000;
+//   max-height: 200px;
+//   overflow-y: auto;
+//   background: white;
+//   border: 1px solid #dee2e6;
+//   border-top: none;
+//   border-radius: 0 0 8px 8px;
+//   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+//   .dropdown-item {
+//     padding: 10px 15px;
+//     cursor: pointer;
+//     border-bottom: 1px solid #f8f9fa;
+//     transition: background-color 0.2s ease;
+
+//     &:hover, &.active {
+//       background-color: #f8f9fa;
+//     }
+
+//     &:last-child {
+//       border-bottom: none;
+//     }
+//   }
+// }
+
+// // Responsive
+// @media (max-width: 768px) {
+//   .itinerary-form .radio-buttons {
+//     grid-template-columns: 1fr;
+//     gap: 8px;
+
+//     .radio-label {
+//       min-height: 60px;
+//       padding: 12px;
+//     }
+//   }
+// }
