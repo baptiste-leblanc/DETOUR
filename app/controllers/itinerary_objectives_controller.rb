@@ -8,7 +8,7 @@ class ItineraryObjectivesController < ApplicationController
     authorize(@itinerary_objective)
 
     if @itinerary_objective.save
-      redirect_to edit_itinerary_objective_path(@itinerary_objective), notice: "Done"
+      redirect_to itinerary_objective_path(@itinerary_objective), notice: "Done"
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
