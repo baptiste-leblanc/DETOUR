@@ -1,34 +1,48 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
+  require "uri"
 
   def create
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
     @itinerary_objective.user = current_user
     authorize(@itinerary_objective)
 
+    count = 0
     if @itinerary_objective.save
-      redirect_to itinerary_objective_path(@itinerary_objective), notice: "Done"
+      filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+      filtered_pois_collection.each do |poi_collection|
+        poi_collection["points_of_interest"].each do |poi|
+          address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
+          PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
+        end
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"], itinerary_objective_id: @itinerary_objective.id)
+        @itinerary = itinerary if count == 0
+        count += 1
+      end
+      redirect_to itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), notice: "Done"
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
+
+  end
   end
 
-  def edit
-    @itinerary_objective = ItineraryObjective.find(params[:id])
-    authorize @itinerary_objective
-  end
+  # def edit
+  #   @itinerary_objective = ItineraryObjective.find(params[:id])
+  #   authorize @itinerary_objective
+  # end
 
-  def update
-    @itinerary_objective = ItineraryObjective.find(params[:id])
-    authorize @itinerary_objective
+  # def update
+  #   @itinerary_objective = ItineraryObjective.find(params[:id])
+  #   authorize @itinerary_objective
 
 
-    if @itinerary_objective.update(address_params)
-      redirect_to @itinerary_objective
-    else
-      render :edit
-    end
-  end
+  #   if @itinerary_objective.update(address_params)
+  #     redirect_to @itinerary_objective
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   private
 
@@ -39,8 +53,9 @@ class ItineraryObjectivesController < ApplicationController
     )
   end
 
-# Code permettant de générer une zone de points d'intérêts
-# Conversion degrés ↔ radians
+  # START: Code permettant de générer une zone de points d'intérêts
+
+  # Conversion degrés ↔ radians
   def deg2rad(deg)
     deg * Math::PI / 180
   end
@@ -122,48 +137,70 @@ class ItineraryObjectivesController < ApplicationController
 
   def generate_POIs(start_lat, start_lon, end_lat, end_lon)
     chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
-# SYSTEME PROMPT A CHANGER PAR MELANIE
     system_prompt = <<~PROMPT
-      Role:
-      You are a guide that provides points of interest (POIs) located strictly inside a geographical area defined by Mapbox.
-      The area is always a polygonal rectangle defined by 4 latitude/longitude coordinates. The input coordinates data will be 5 points. The 5th coordinates represents the 1st point in order to form a closed rectangle.
-      A POI is not necessarily a museum or a monument — it may also be a restaurant, store, café, park, or even a pleasant street — but it must always satisfy the geographical constraint. Your recommandation should focus more on outstanding places in terms of their aesthetics rather than museums and monuments. The final objective is to make the walk on the itinerary as enjoyable and photogenic as possible.
       Rules:
-      1. Geographical constraint (mandatory):
-      - Only return POIs whose latitude and longitude are strictly inside the polygonal rectangle defined by the 4 coordinates. This rectangle is a bounding box with these 4 connecting points that forms a closed rectangle.
-      - Discard any POI located outside or exactly on the edge of the rectangle. The middle of the edge formed by the connection of the 1st and the 2nd points correspounds to the point of departure. The middle of the edge formed by the connection of the 3rd and the 4th points correspounds to the point of arrival.
-      - Do not extrapolate or infer locations: use only validated POIs inside the area.
-      2. Theme constraint (optional):
-      - If a "theme" field is provided, return only POIs that are coherent with the theme.
-      - If no theme is provided, return relevant POIs without thematic filtering.
-      3. Quantity constraint:
-      - Return between 10 and 15 POIs.
-      - If fewer than 10 valid POIs exist inside the rectangle, return only those found.
-      - Never invent, hallucinate, or approximate data.
-      4. Data format constraint:
-      Each POI must be represented as an object with exactly the following fields:
+      1. Point of interest (POI) definition (mandatory):
+      A POI is not limited to monuments or museums: it can also be a street, park, square, dead end, passageway, bridge, public place, natural spot, restaurant, café, or shop.
+      Always prioritize outstanding, visually attractive, and photogenic POIs that enhance the enjoyment of the route.
+      The ultimate goal is to make the itinerary as aesthetic, memorable, and camera‑worthy as possible.
+      2. Geographical constraint (mandatory):
+      Only return POIs strictly inside the rectangle defined by the 4 coordinates, given by Mapbox.
+      Exclude any POI outside or exactly on the rectangle’s edges.
+      The midpoint of the edge between points 1 and 2 = departure point.
+      The midpoint of the edge between points 3 and 4 = arrival point.
+      Never extrapolate, infer or approximate locations: use only validated POIs inside the rectangle.
+      3. Theme constraint (optional):
+      If a "theme" field is provided, return only POIs coherent with both the theme and the POI definition constraint.
+      If no "theme" is provided, return only POIs relevant to the "best POIs" theme.
+      4. Quantity constraint:
+      Each theme must contain between 5 and 15 POIs inclusive.
+      Never return fewer than 5 or more than 15 POIs per theme.
+      If there are fewer than 5 valid POIs inside the rectangle for a theme, that theme must be omitted and replaced by another coherent category (to always ensure 4 themes with 5–15 POIs each).
+      Never invent, hallucinate, or approximate data.
+      5. Data format constraint:
+      POIs must be grouped into exactly 4 themes:
+      - Theme 1: "best POIs" (mandatory, first group, containing the top photogenic POIs).
+      - Themes 2–4: categories based on POIs’ nature (e.g., historical, cultural, leisure, food, shopping, nature).
+      Each theme must include:
+      - theme_name (string, ≤7 words; the first must be "best POIs")
+      - theme_description (string, ≤12 words)
+      - points_of_interest (array of 5–15 POI objects)
+      Each POI must include exactly:
       - name (string)
-      - location (object) containing: full_address (string), latitude (float), longitude ( float)
-      - description (string, maximum 15 words, short and concise)
+      - location (object) containing: full_address (string), latitude (float) and longitude (float)
+      - description (string, ≤15 words, concise)
       - category (string)
-      5. Output constraint:
-      - The response must be in JSON format, the outcome is directly a valid JSON object, with a single top-level key: "points_of_interest", and without any text before. Thus, this output must be given directly as input to Mapbox which can interpretated it.
-      - "points_of_interest" must be an array of POI objects.
-      - Do not include any additional keys, metadata, explanations, or text before/after the JSON.
+      6. Output constraint:
+      The output must be pure JSON only (no explanations, no comments, no text before/after).
+      The top-level key must be { "POIs_collection": [ ... ] }
+      "POIs_collection" must be an array of 4 theme objects.
+      Each theme object must have theme_name, theme_description, and points_of_interest.
+      "points_of_interest" must be an array of 5-15 POI objects.
+      Do not include any other keys, metadata, or comments.
   PROMPT
-# SYSTEME PROMPT A CHANGER PAR MELANIE
   area_for_POIs = corridor_polygon(start_lat, start_lon, end_lat, end_lon)
 # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
-  # PROMPT A CHANGER PAR MELANIE
-  prompt =  "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
-# PROMPT A CHANGER PAR MELANIE
+  prompt = "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
   response = chat.with_instructions(system_prompt).ask(prompt)
-  pois = JSON.parse(response.content)["points_of_interest"]
+  pois_collection = JSON.parse(response.content)["POIs_collection"]
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
-  filtered_pois = pois.select do |poi|
-    lat = poi["location"]["latitude"]
-    lon = poi["location"]["longitude"]
-    point_in_polygon?([lon, lat], polygon)
+  filtered_pois_collection = pois_collection.each do |poi_collection|
+    poi_collection["points_of_interest"].select do |poi|
+      lat = poi["location"]["latitude"]
+      lon = poi["location"]["longitude"]
+      point_in_polygon?([lon, lat], polygon)
     end
   end
-end
+  end
+
+  # END: Code permettant de générer une zone de points d'intérêts
+ # BAPTISTE BOUGER EN SHOW d'itinerary
+  def order_waypoints(start_lat, start_lon, end_lat, end_lon, filtered_pois)
+    url =
+    filtered_pois.each do |poi|
+     url = "https://api.mapbox.com/optimized-trips/v1/mapbox/walking/#{start_lat},?access_token=pk.eyJ1IjoidWJhcSIsImEiOiJjbWRwdWV3aXUwZGdyMmtxdzE3ZHB4YjU2In0.Y_ue11FiRja43Jm78jwPvA&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
+    end
+    url = "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/2.3469%2C48.8609%3B2.3522%2C48.8719%3B2.350867%2C48.866582%3B2.370867%2C48.876582?access_token=pk.eyJ1IjoidWJhcSIsImEiOiJjbWRwdWV3aXUwZGdyMmtxdzE3ZHB4YjU2In0.Y_ue11FiRja43Jm78jwPvA&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
+    ordered_pois_serialized = URI.parse(url).read
+    ordered_pois = JSON.parse(ordered_pois_serialized)
+  end

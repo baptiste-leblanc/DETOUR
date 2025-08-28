@@ -1,7 +1,9 @@
 class ItinerariesController < ApplicationController
   require 'json'
   def show
-    @itineraries = Itinerary.all
+    @itinerary = Itinerary.find(params[:id])
+    authorize(@itinerary)
+
   end
 
   private
