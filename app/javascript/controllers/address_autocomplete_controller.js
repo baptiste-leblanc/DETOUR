@@ -11,7 +11,8 @@ export default class extends Controller {
       enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
-      types: "country,region,place,locality,neighborhood,address",
+      types: "place,locality,neighborhood,address,poi",
+      proximity: this._userLocation(),
       language: 'fr'
     })
 
@@ -33,5 +34,18 @@ export default class extends Controller {
 
   #clearInputValue() {
     this.addressTarget.value = ""
+  }
+
+  _userLocation() {
+    // récupère la position navigateur
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        this.geocoder.setProximity({
+          longitude: 2.333333,
+          latitude: 48.866667
+        })
+      })
+    }
+    return undefined
   }
 }

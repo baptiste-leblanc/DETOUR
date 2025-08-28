@@ -12,5 +12,9 @@ class Address < ApplicationRecord
            foreign_key: "arrival_address_id",
            dependent: :nullify
 
-  has_many :point_of_interests, dependent: :destroy
+  has_one :point_of_interests,
+           class_name: "PointOfInterest",
+           foreign_key: "address_id",
+           dependent: :nullify
+
 end
