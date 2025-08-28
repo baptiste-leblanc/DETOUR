@@ -1,9 +1,20 @@
 class ItinerariesController < ApplicationController
   require 'json'
-  def show
-    @itinerary = Itinerary.find(params[:id])
+
+  def best_itinerary
+    itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
+    @itinerary = itinerary_objective.itineraries.first
     authorize(@itinerary)
   end
+
+  def alternative_itinerary
+
+  end
+
+  # def show
+  #   @itinerary = Itinerary.find(params[:id])
+  #   authorize(@itinerary)
+  # end
 
   private
 
