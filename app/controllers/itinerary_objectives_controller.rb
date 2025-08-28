@@ -15,7 +15,7 @@ class ItineraryObjectivesController < ApplicationController
           address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
           PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
         end
-        itinerary = Itinerary.create(theme: poi_collection["theme_name"], itinerary_objective: @itinerary_objective.id)
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"], itinerary_objective_id: @itinerary_objective.id)
         @itinerary = itinerary if count == 0
         count += 1
       end
@@ -183,7 +183,6 @@ class ItineraryObjectivesController < ApplicationController
   prompt = "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
   response = chat.with_instructions(system_prompt).ask(prompt)
   pois_collection = JSON.parse(response.content)["POIs_collection"]
-  raise
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
   filtered_pois_collection = pois_collection.each do |poi_collection|
     poi_collection["points_of_interest"].select do |poi|

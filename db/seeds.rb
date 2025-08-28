@@ -13,8 +13,8 @@ ItineraryPointOfInterest.destroy_all
 Itinerary.destroy_all
 ItineraryObjective.destroy_all
 User.destroy_all
-Address.destroy_all
 PointOfInterest.destroy_all
+Address.destroy_all
 
 # Users
 user1 = User.create!(email: "test@test.com", password: "password")

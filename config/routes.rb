@@ -13,6 +13,6 @@ Rails.application.routes.draw do
   get "service-worker" => "pwa#service_worker"
 
   resources :itinerary_objectives, only: [:create] do
-    resources :itinerary, only: [:show]
+    resources :itineraries, only: [:show]
   end
 end
