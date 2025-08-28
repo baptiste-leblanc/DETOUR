@@ -7,6 +7,7 @@ class ItineraryObjectivesController < ApplicationController
     @itinerary_objective.user = current_user
     authorize(@itinerary_objective)
 
+    count = 0
     if @itinerary_objective.save
       filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
       filtered_pois_collection.each do |poi_collection|
@@ -14,8 +15,9 @@ class ItineraryObjectivesController < ApplicationController
           address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
           PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
         end
-        itinerary = Itinerary.create(theme: poi_collection["theme_name"])
-        @itinerary = itinerary if poi_collection["theme_name"] == "best POIs"
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"], itinerary_objective: @itinerary_objective.id)
+        @itinerary = itinerary if count == 0
+        count += 1
       end
       redirect_to itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), notice: "Done"
     else
@@ -137,45 +139,51 @@ class ItineraryObjectivesController < ApplicationController
     chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
     system_prompt = <<~PROMPT
       Rules:
-        1. Geographical constraint (mandatory):
-        Only return POIs strictly inside the rectangle defined by the 4 coordinates, given by Mapbox.
-        Exclude any POI outside or exactly on the rectangle edges.
-        The middle of the edge between points 1 and 2 is the departure point.
-        The middle of the edge between points 3 and 4 is the arrival point.
-        Never extrapolate or infer locations: use only validated POIs inside the area.
-        2. Theme constraint (optional):
-        If a "theme" field is provided, return only POIs coherent with the theme.
-        If no "theme" is provided, return relevant POIs without thematic filtering.
-        3. Quantity constraint:
-        Return 10 to 15 POIs.
-        If fewer than 10 valid POIs exist inside the rectangle, return only those found.
-        Never invent, hallucinate, or approximate data.
-        4. Data format constraint:
-        POIs must be grouped into exactly 4 themes:
-        - Theme 1: "best POIs" (mandatory, first group)
-        - Themes 2 to 4: categories based on POIs nature (e.g., historical, shopping, food, leisure, culture).
-        Each theme must include:
-        - theme_name (string, ≤7 words; the first must be "best POIs")
-        - theme_description (string, ≤12 words)
-        - points_of_interest (array of POI objects)
-        Each POI must include exactly:
-        - name (string)
-        - location (object) containing: full_address (string), latitude (float) and longitude (float)
-        - description (string, ≤15 words, concise)
-        - category (string)
-        5. Output constraint:
-        The response must be pure JSON, with no text, introduction, or explanation before or after.
-        The top-level key must be "POIs_collection".
-        "POIs_collection" must be an array of 4 theme objects.
-        Each theme object must have theme_name, theme_description, and points_of_interest.
-        "points_of_interest" must be an array of POI objects.
-        Do not include any other keys, metadata, or comments.
+      1. Point of interest (POI) definition (mandatory):
+      A POI is not limited to monuments or museums: it can also be a street, park, square, dead end, passageway, bridge, public place, natural spot, restaurant, café, or shop.
+      Always prioritize outstanding, visually attractive, and photogenic POIs that enhance the enjoyment of the route.
+      The ultimate goal is to make the itinerary as aesthetic, memorable, and camera‑worthy as possible.
+      2. Geographical constraint (mandatory):
+      Only return POIs strictly inside the rectangle defined by the 4 coordinates, given by Mapbox.
+      Exclude any POI outside or exactly on the rectangle’s edges.
+      The midpoint of the edge between points 1 and 2 = departure point.
+      The midpoint of the edge between points 3 and 4 = arrival point.
+      Never extrapolate, infer or approximate locations: use only validated POIs inside the rectangle.
+      3. Theme constraint (optional):
+      If a "theme" field is provided, return only POIs coherent with both the theme and the POI definition constraint.
+      If no "theme" is provided, return only POIs relevant to the "best POIs" theme.
+      4. Quantity constraint:
+      Each theme must contain between 5 and 15 POIs inclusive.
+      Never return fewer than 5 or more than 15 POIs per theme.
+      If there are fewer than 5 valid POIs inside the rectangle for a theme, that theme must be omitted and replaced by another coherent category (to always ensure 4 themes with 5–15 POIs each).
+      Never invent, hallucinate, or approximate data.
+      5. Data format constraint:
+      POIs must be grouped into exactly 4 themes:
+      - Theme 1: "best POIs" (mandatory, first group, containing the top photogenic POIs).
+      - Themes 2–4: categories based on POIs’ nature (e.g., historical, cultural, leisure, food, shopping, nature).
+      Each theme must include:
+      - theme_name (string, ≤7 words; the first must be "best POIs")
+      - theme_description (string, ≤12 words)
+      - points_of_interest (array of 5–15 POI objects)
+      Each POI must include exactly:
+      - name (string)
+      - location (object) containing: full_address (string), latitude (float) and longitude (float)
+      - description (string, ≤15 words, concise)
+      - category (string)
+      6. Output constraint:
+      The output must be pure JSON only (no explanations, no comments, no text before/after).
+      The top-level key must be { "POIs_collection": [ ... ] }
+      "POIs_collection" must be an array of 4 theme objects.
+      Each theme object must have theme_name, theme_description, and points_of_interest.
+      "points_of_interest" must be an array of 5-15 POI objects.
+      Do not include any other keys, metadata, or comments.
   PROMPT
   area_for_POIs = corridor_polygon(start_lat, start_lon, end_lat, end_lon)
 # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
   prompt = "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
   response = chat.with_instructions(system_prompt).ask(prompt)
   pois_collection = JSON.parse(response.content)["POIs_collection"]
+  raise
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
   filtered_pois_collection = pois_collection.each do |poi_collection|
     poi_collection["points_of_interest"].select do |poi|
