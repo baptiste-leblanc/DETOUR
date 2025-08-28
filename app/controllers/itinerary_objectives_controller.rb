@@ -8,18 +8,21 @@ class ItineraryObjectivesController < ApplicationController
     authorize(@itinerary_objective)
 
     if @itinerary_objective.save
-      redirect_to itinerary_objective_path(@itinerary_objective), notice: "Done"
+      filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+      filtered_pois_collection.each do |poi_collection|
+        poi_collection["points_of_interest"].each do |poi|
+          address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
+          PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
+        end
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"])
+        @itinerary = itinerary if poi_collection["theme_name"] == "best POIs"
+      end
+      redirect_to itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), notice: "Done"
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
 
-    filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
-    filtered_pois_collection.each do |poi_collection|
-      poi_collection["points_of_interest"].each do |poi|
-        address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
-        PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
-      end
-    end
+  end
   end
 
   # def edit
@@ -37,7 +40,7 @@ class ItineraryObjectivesController < ApplicationController
   #   else
   #     render :edit
   #   end
-  end
+  # end
 
   private
 

@@ -58,16 +58,19 @@ puts 'Itinerary objectives created'
 itinerary1 = Itinerary.create!(
   duration: 1800,   # 30 min
   theme: "Musées",
+  description: "Best Museum",
   itinerary_objective_id: objective1.id
 )
 itinerary2 = Itinerary.create!(
   duration: 3600,   # 1h
   theme: "Monuments emblématiques",
+  description: "Best monuments",
   itinerary_objective_id: objective2.id
 )
 itinerary3 = Itinerary.create!(
   duration: 2700,   # 45 min
   theme: "Quartier pittoresque",
+  description: "Best neighbourhood",
   itinerary_objective_id: objective3.id
 )
 puts 'Itineraries created'
