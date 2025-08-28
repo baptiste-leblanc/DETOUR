@@ -9,20 +9,28 @@ input[type="radio"] {
 }
 
 input[type="radio"] + label {
-  width: 250px;
+  width: 100%;
   height: 75px;
   padding: 12px 24px;
-  background: linear-gradient(145deg, #ffffff, #ffffff);
-  border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
 }
 
+label:hover {
+  color:white;
+  background: #000000;
+  border: 1px solid #f5d8ee;
+
+  .sub-text {
+      color: #f5d8ee;
+  }
+}
+
 input[type="radio"]:checked + label {
-  background: linear-gradient(145deg, #000000, #000000);
-  color: white;
+  background:#000000;
+  color: rgba(2, 175, 103, 0.876);
   box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
 }
 
@@ -33,6 +41,27 @@ input[type="radio"]:checked + label {
 
 .sub-text {
   font-size: 0.8em;
-  color: #3b3b3b;
+  color: #515151;
   font-weight: 300;
+}
+
+.direct {
+ background: white;
+ border: 1px solid black;
+}
+
+.max-10 {
+background: #f5d8ee;
+border: 1px solid black;
+}
+
+.max-20 {
+background: #bc8dc4;
+border: 1px solid black;
+}
+
+.long-scroll {
+  color: #ffffff;
+  border: 1px solid black;
+  background: #161273;
 }
