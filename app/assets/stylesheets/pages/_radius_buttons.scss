@@ -30,10 +30,14 @@ label:hover {
 
 input[type="radio"]:checked + label {
   background:#000000;
-  color: rgba(2, 175, 103, 0.876);
+  border: 2px solid #bfe3a5;
+  color: #bfe3a5;
   box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
-}
 
+  .sub-text {
+  color: #ffffff;
+}
+}
 .main-text {
   font-size: 1em;
   font-weight: bold;
@@ -41,7 +45,7 @@ input[type="radio"]:checked + label {
 
 .sub-text {
   font-size: 0.8em;
-  color: #515151;
+  color: #424242;
   font-weight: 300;
 }
 
@@ -64,4 +68,8 @@ border: 1px solid black;
   color: #ffffff;
   border: 1px solid black;
   background: #161273;
+}
+
+.go {
+  width: 75px;
 }
