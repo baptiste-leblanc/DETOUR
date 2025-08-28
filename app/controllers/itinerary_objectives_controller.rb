@@ -19,13 +19,14 @@ class ItineraryObjectivesController < ApplicationController
         @itinerary = itinerary if count == 0
         count += 1
       end
-      redirect_to itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), notice: "Done"
+      redirect_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), notice: "Done"
     else
       redirect_to itinerary_objective_path, alert: "Error"
     end
 
   end
   end
+
 
   # def edit
   #   @itinerary_objective = ItineraryObjective.find(params[:id])
