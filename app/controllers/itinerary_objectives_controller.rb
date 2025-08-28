@@ -13,10 +13,13 @@ class ItineraryObjectivesController < ApplicationController
       redirect_to itinerary_objective_path, alert: "Error"
     end
 
-    pois = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
-    pois.each do |poi|
-      Point_of_interest.create(name: poi.name)
-    raise
+    filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+    filtered_pois_collection.each do |poi_collection|
+      poi_collection["points_of_interest"].each do |poi|
+        address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
+        PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
+      end
+    end
   end
 
   # def edit
@@ -171,16 +174,13 @@ class ItineraryObjectivesController < ApplicationController
   response = chat.with_instructions(system_prompt).ask(prompt)
   pois_collection = JSON.parse(response.content)["POIs_collection"]
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
-  pois_collection.each do |poi_theme|
-    poi_theme["points_of_interest"].each do |poi|
-
-
-
-      filtered_pois = pois.select do |poi|
-    lat = poi["location"]["latitude"]
-    lon = poi["location"]["longitude"]
-    point_in_polygon?([lon, lat], polygon)
+  filtered_pois_collection = pois_collection.each do |poi_collection|
+    poi_collection["points_of_interest"].select do |poi|
+      lat = poi["location"]["latitude"]
+      lon = poi["location"]["longitude"]
+      point_in_polygon?([lon, lat], polygon)
     end
+  end
   end
 
   # END: Code permettant de générer une zone de points d'intérêts
