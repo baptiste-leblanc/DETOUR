@@ -10,7 +10,8 @@ export default class extends Controller {
   connect() {
     this.geocoder = new MapboxGeocoder({
       accessToken: this.apiKeyValue,
-      types: "locality,neighborhood,address,place",
+      types: "place,locality,neighborhood,address",
+      proximity: this._userLocation(),
       language: 'fr'
     })
 
@@ -29,5 +30,18 @@ export default class extends Controller {
 
   #clearInputValue() {
     this.addressTarget.value = ""
+  }
+
+  _userLocation() {
+    // récupère la position navigateur
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        this.geocoder.setProximity({
+          longitude: 2.333333,
+          latitude: 48.866667
+        })
+      })
+    }
+    return undefined
   }
 }

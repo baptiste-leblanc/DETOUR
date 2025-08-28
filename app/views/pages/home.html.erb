@@ -1,16 +1,16 @@
 <div style="position:relative;z-index:2">
   <%= simple_form_for @itinerary_objective do |f| %>
     <%= f.simple_fields_for :departure_address, Address.new do |g| %>
-      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}, class:"d-none"},
-      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
+      <%= g.input :full_address, input_html: { data: {address_autocomplete_target: "address"}, class:"d-none" },
+      wrapper_html: { data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
     <% end %>
 
     <%= f.simple_fields_for :arrival_address, Address.new do |g| %>
-      <%= g.input :full_address, input_html: {data: {address_autocomplete_target: "address"}, class:"d-none"},
-      wrapper_html: {data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
+      <%= g.input :full_address, input_html: { data: {address_autocomplete_target: "address"}, class:"d-none" },
+      wrapper_html: { data: {controller: "address-autocomplete", address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"] }}, label: false %>
     <% end %>
 
-<div>
+  <div>
     <div class="radio-buttons">
       <input type="radio" id="option1" name="choice" value="1">
       <label for="option1" class="shadow-sm">
@@ -36,9 +36,9 @@
         <span class="main-text">Long scroll</span>
       </label>
     </div>
-</div>
+  </div>
 
-    <%= f.submit %>
+    <%= f.submit value: 'Find my detour!' %>
   <% end %>
 </div>
 
