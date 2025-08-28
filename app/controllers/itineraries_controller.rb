@@ -39,6 +39,3 @@ class ItinerariesController < ApplicationController
     p sorted_waypoints
   end
 end
-
-
-# https://api.mapbox.com/optimized-trips/v1/mapbox/walking/2.379982,48.864892;2.342542,48.860393;2.36041,48.85552;2.305082,48.856271?access_token=pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last
