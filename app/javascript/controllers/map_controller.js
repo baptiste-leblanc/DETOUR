@@ -64,7 +64,7 @@ export default class extends Controller {
           });
 
           this.waypointsValue.forEach(waypoint => {
-            new mapboxgl.Marker({ color: '#f5d8ee ' }).setLngLat(waypoint.location).addTo(this.map);
+            new mapboxgl.Marker({ color: '#161273' }).setLngLat(waypoint.location).addTo(this.map);
           });
           const bounds = new mapboxgl.LngLatBounds();
           route.coordinates.forEach(c => bounds.extend(c));
