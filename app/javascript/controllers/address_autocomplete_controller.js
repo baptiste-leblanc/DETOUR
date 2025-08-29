@@ -7,6 +7,7 @@ export default class extends Controller {
 
   static targets = ["address"]
   connect() {
+
     this.geocoder = new MapboxGeocoder({
       enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",

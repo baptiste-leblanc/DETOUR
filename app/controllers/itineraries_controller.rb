@@ -50,4 +50,8 @@ class ItinerariesController < ApplicationController
 
     p sorted_waypoints
   end
+
+  def set_duration
+
+  end
 end
