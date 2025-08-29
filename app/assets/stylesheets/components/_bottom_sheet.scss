@@ -1,0 +1,167 @@
+/* Bottom Sheet Mobile */
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 20px; // Marge uniforme sur tous les côtés
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  z-index: 1000;
+
+  /* Hauteur adaptative selon le contenu */
+  height: auto;
+  min-height: 200px;
+  max-height: 50vh; // Maximum 50% de la hauteur d'écran
+}
+
+/* Header avec icône et titre - alignement uniforme en hauteur */
+.sheet-header {
+  display: flex;
+  align-items: center; // Alignement vertical centré
+  margin-bottom: 16px;
+  gap: 12px;
+  min-height: 24px; // Hauteur minimum pour uniformité
+}
+
+/* Icône du flâneur - taille fixe pour alignement */
+.flaneur-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+
+  // Couleur bleue (comme l'ancien cercle)
+  filter: brightness(0) saturate(100%) invert(13%) sepia(93%) saturate(7426%) hue-rotate(240deg) brightness(92%) contrast(106%);
+}
+
+.sheet-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 24px; // Ligne fixe pour alignement avec l'icône
+  margin: 0; // Supprime les marges par défaut
+}
+
+/* Contenu avec marges uniformes */
+.sheet-content {
+  margin-bottom: 20px;
+  padding: 0; // Supprime le padding pour utiliser les marges du conteneur
+}
+
+.sheet-text {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.4;
+  margin: 0; // Supprime les marges par défaut
+}
+
+.sheet-distance {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Container des boutons avec marge uniforme */
+.button-container {
+  display: flex;
+  gap: 12px;
+  margin: 0; // Les marges sont gérées par le padding du conteneur
+}
+
+/* Styles des boutons - compatible avec Bootstrap */
+.btn {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: #161273;
+  color: white;
+  border-color: #161273;
+  flex: 1;
+}
+
+.btn-primary:hover {
+  background: #161273;
+  border-color: #161273;
+  color: white;
+  text-decoration: none;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+  border-color: #6c757d;
+  flex: 0 0 auto;
+  min-width: 120px;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  border-color: #545b62;
+  color: white;
+  text-decoration: none;
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  color: #6c757d;
+  border-color: #6c757d;
+  flex: 0 0 auto;
+  min-width: 100px;
+}
+
+.btn-outline-secondary:hover {
+  background: #6c757d;
+  color: white;
+  text-decoration: none;
+}
+
+/* Responsive mobile */
+@media (max-height: 600px) {
+  .bottom-sheet {
+    max-height: 60vh; // Plus de place sur petits écrans
+    padding: 16px; // Marge uniforme réduite sur petits écrans
+  }
+
+  .sheet-title {
+    font-size: 16px;
+  }
+
+  .sheet-text {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .bottom-sheet {
+    padding: 16px; // Marge uniforme sur très petits écrans
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-secondary,
+  .btn-outline-secondary {
+    min-width: auto;
+  }
+}

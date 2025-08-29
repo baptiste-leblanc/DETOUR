@@ -1,22 +1,31 @@
+<div class="position-absolute start-50 translate-middle z-2 mt-3 px-3" style= "top: 7.5%; width: 80%">
+    <%= render "shared/address", itinerary_objective: @itinerary_objective %>
+</div>
 
-<div style="position:relative" class="z-2">
-  <div class="bg-white position-absolute start-50 translate-middle" style= "top: 5%">
-
+<!-- Bottom Sheet -->
+<div class="bottom-sheet z-2">
+  <!-- Header avec icône et titre -->
+  <div class="sheet-header">
+    <%= image_tag "flaneur.png", alt: "Flâneur", class: "flaneur-icon" %>
+    <h2 class="sheet-title">
+      Your itinerary: <span id="duration"></span> - <span id="distance"></span>
+    </h2>
   </div>
 
-  <div class="bg-white position-absolute start-50 translate-middle"  style= "bottom: 10%">
-    <div class="bg-white position-absolute start-50 translate-middle d-flex justify-content-between w-75 rounded-4" style= "bottom: 10%">
-    <div>
-        <h4><span id="duration"></span></h4>
-        <h4><span id="distance"></span></h4>
-
-    </div>
-    <div>
-      <p>AAA</p>
-    </div>
-  </div>
+  <!-- Contenu -->
+  <div class="sheet-content">
+    <p class="sheet-text">
+      <%= @itinerary.description %>
+    </p>
   </div>
 
+  <!-- Boutons -->
+  <div class="button-container">
+     <%= link_to "New itinerary", root_path, class: "btn btn-outline-secondary"%>
+     <%= link_to "See alternatives", alternative_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "btn btn-secondary rounded-4"%>
+    <%= link_to "Go", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "btn btn-primary rounded-4"%>
+  </div>
+</div>
 </div>
 
 <%= render "shared/map", waypoints: @waypoints %>
