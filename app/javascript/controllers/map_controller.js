@@ -5,11 +5,20 @@ export default class extends Controller {
   static values = { apiKey: String, waypoints: Array }
 
   connect() {
+
+    if (this.map) return; // stop if map already exists
+
+    if (!this.apiKeyValue) {
+      console.error("Missing Mapbox API key!");
+      return;
+    }
+
     mapboxgl.accessToken = this.apiKeyValue;
 
     this.map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/bapti/cmesdwox4006701r6gck96iy9",
+      style: "mapbox://styles/bapti/cmewuk9v2009d01scehv6bia4",
+      accessToken: this.apiKeyValue,
       center: [2.3522, 48.8566],
       zoom: 12
     });
@@ -37,7 +46,7 @@ export default class extends Controller {
           const duration = data.routes[0].duration;
           const minutes = Math.round(duration / 60);
           document.querySelector('#duration').textContent = `${minutes} min`
-          
+
           const distance_m = data.routes[0].distance;
           const distance_km = Math.round(distance_m / 1000);
           document.querySelector('#distance').textContent = `${distance_km}km`
@@ -51,10 +60,11 @@ export default class extends Controller {
             type: "line",
             source: "route",
             layout: { "line-join": "round", "line-cap": "round" },
-            paint: { "line-color": "#3B82F6", "line-width": 5 }
+            paint: { "line-color": "#161273", "line-width": 5 }
           });
+
           this.waypointsValue.forEach(waypoint => {
-            new mapboxgl.Marker().setLngLat(waypoint.location).addTo(this.map);
+            new mapboxgl.Marker({ color: '#161273' }).setLngLat(waypoint.location).addTo(this.map);
           });
           const bounds = new mapboxgl.LngLatBounds();
           route.coordinates.forEach(c => bounds.extend(c));
