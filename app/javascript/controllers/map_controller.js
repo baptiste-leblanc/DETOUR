@@ -5,10 +5,11 @@ export default class extends Controller {
   static values = { apiKey: String, waypoints: Array }
 
   connect() {
+    mapboxgl.accessToken = this.apiKeyValue;
+
     this.map = new mapboxgl.Map({
-      accessToken: this.apiKeyValue,
       container: "map",
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/bapti/cmesdwox4006701r6gck96iy9",
       center: [2.3522, 48.8566],
       zoom: 12
     });
@@ -43,9 +44,8 @@ export default class extends Controller {
             layout: { "line-join": "round", "line-cap": "round" },
             paint: { "line-color": "#3B82F6", "line-width": 5 }
           });
-          this.waypointsValue.forEach(coord => {
-            new mapboxgl.Marker().setLngLat(coord).addTo(this.map);
-            console.log(coord);
+          this.waypointsValue.forEach(waypoint => {
+            new mapboxgl.Marker().setLngLat(waypoint.location).addTo(this.map);
           });
           const bounds = new mapboxgl.LngLatBounds();
           route.coordinates.forEach(c => bounds.extend(c));
