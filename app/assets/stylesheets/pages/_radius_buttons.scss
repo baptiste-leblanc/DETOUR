@@ -18,16 +18,6 @@ input[type="radio"] + label {
   font-weight: 500;
 }
 
-label:hover {
-  color:white;
-  background: #000000;
-  border: 1px solid #f5d8ee;
-
-  .sub-text {
-      color: #f5d8ee;
-  }
-}
-
 input[type="radio"]:checked + label {
   background:#000000;
   border: 2px solid #bfe3a5;
@@ -37,6 +27,7 @@ input[type="radio"]:checked + label {
   .sub-text {
   color: #ffffff;
 }
+
 }
 .main-text {
   font-size: 1em;
