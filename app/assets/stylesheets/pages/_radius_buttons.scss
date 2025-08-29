@@ -1,0 +1,66 @@
+.radio-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + label {
+  width: 100%;
+  height: 60px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 300;
+}
+
+input[type="radio"]:checked + label {
+  background:#000000;
+  border: 1px solid #bfe3a5;
+  color: #bfe3a5;
+  box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
+
+  .sub-text {
+  color: #ffffff;
+}
+
+}
+.main-text {
+  font-size: 1em;
+  font-weight: semi-bold;
+}
+
+.sub-text {
+  font-size: 0.8em;
+  color: #424242;
+  font-weight: 300;
+}
+
+.direct {
+ background: white;
+ border: 1px solid #cacaca;
+}
+
+.max-10 {
+background: #f5d8ee;
+border: 1px solid #cacaca;
+}
+
+.max-20 {
+background: #bc8dc4;
+border: 1px solid #cacaca;
+}
+
+.long-scroll {
+  color: #ffffff;
+  border: 1px solid #cacaca;
+  background: #161273;
+}
+
+.go {
+  width: 75px;
+}

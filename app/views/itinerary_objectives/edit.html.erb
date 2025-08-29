@@ -1,0 +1,16 @@
+<div class="form-div z-2">
+  <%= simple_form_for @itinerary_objective do |f| %>
+    <div class="d-flex" style="gap: 0;">
+      <%= f.input :name,
+          placeholder: "Enter destination...",
+          required: true,
+          label: false,
+          wrapper: false,
+          input_html: { class: "flex-grow-1 form-control rounded-end" } %>
+
+      <%= f.button :submit, '➜', class: 'btn btn-dark rounded-start' %>
+    </div>
+  <% end %>
+</div>
+
+<%= render "shared/map" %>

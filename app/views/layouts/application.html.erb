@@ -8,7 +8,7 @@
     <%= tag.link rel: "icon", href: image_url("logo.png"), type: "image/png" %>
     <%= tag.link rel: "apple-touch-icon", href: image_url("logo.png") %>
 
-<%= csrf_meta_tags %>
+    <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -19,17 +19,18 @@
     <div class="container-fluid">
       <% if user_signed_in? %>
       <div class="row" data-controller="toggle">
-        <nav class="col-md-2 sidebar pt-3" data-toggle-target="hideable">
-          <%= render "shared/sidenav", itineraries: @itineraries %>
+        <nav class="opacity-0 z-n1 col-9 sidebar pt-3 bg-white h-100 position-absolute" data-toggle-target="hideable" style="transition: opacity 0.3s ease-in-out">
+          <%= render "shared/sidenav", itineraries: Itinerary.all %>
         </nav>
         <div class="col-md-10 my-4">
           <%= render "shared/flashes" %>
-          <%= link_to "#", class: "d-none nav-link text-dark",
+          <%= link_to "#", class: "nav-link text-dark ps-0",
                     data: {action: "click->toggle#call", toggle_target: "show"} do %>
           <i class="fa-solid fa-bars"></i>
           <% end %>
       <% end %>
           <%= yield %>
+
         </div>
       </div>
     </div>

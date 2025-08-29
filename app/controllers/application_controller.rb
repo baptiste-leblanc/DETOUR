@@ -20,8 +20,6 @@ class ApplicationController < ActionController::Base
     devise_controller? || params[:controller] =~ /(^(rails_)?admin)|(^pages$)|(pwa)/
   end
 
-  private
-
   def set_itineraries
     @itineraries = Itinerary.all
   end

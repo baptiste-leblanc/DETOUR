@@ -11,4 +11,13 @@ Rails.application.routes.draw do
   # root "posts#index"
   get "webmanifest"    => "pwa#manifest"
   get "service-worker" => "pwa#service_worker"
+
+  resources :itinerary_objectives, only: [:create] do
+    resources :itineraries, only: [:show] do
+      collection do
+        get :best_itinerary
+        get :alternative_itinerary
+      end
+    end
+  end
 end

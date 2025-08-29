@@ -1,14 +1,14 @@
 
   <ul class="position-sticky sticky-top nav flex-column">
     <li class="nav-item">
-      <%= link_to "#", class: "nav-link text-dark", data: { action: "click->toggle#call" } do %>
+      <%= link_to "#", class: "nav-link text-dark ps-0", data: { action: "click->toggle#call" } do %>
         <i class="fa-solid fa-bars"></i>
       <% end %>
     </li>
-    <p>Hello World</p>
     <% itineraries.each do |itinerary| %>
       <li class="nav-item">
         <p><%= itinerary.theme %></p>
       </li>
     <% end %>
   </ul>
+<div class="black-wall"></div>
