@@ -26,9 +26,8 @@ class ItineraryObjectivesController < ApplicationController
       end
       redirect_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective)
     else
-      redirect_to itinerary_objective_path, alert: "Error"
+      redirect_to itinerary_objective_path
     end
-
   end
   end
 
