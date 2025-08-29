@@ -33,6 +33,15 @@ export default class extends Controller {
         .then(res => res.json())
         .then(data => {
           const route = data.routes[0].geometry;
+
+          const duration = data.routes[0].duration;
+          const minutes = Math.round(duration / 60);
+          document.querySelector('#duration').textContent = `${minutes} min`
+          
+          const distance_m = data.routes[0].distance;
+          const distance_km = Math.round(distance_m / 1000);
+          document.querySelector('#distance').textContent = `${distance_km}km`
+
           this.map.addSource("route", {
             type: "geojson",
             data: { type: "Feature", geometry: route }

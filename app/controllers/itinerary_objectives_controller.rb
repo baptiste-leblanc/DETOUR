@@ -13,7 +13,7 @@ class ItineraryObjectivesController < ApplicationController
       filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
       filtered_pois_collection.each do |poi_collection|
 
-        itinerary = Itinerary.create(theme: poi_collection["theme_name"], itinerary_objective_id: @itinerary_objective.id)
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
         poi_collection["points_of_interest"].each do |poi|
           address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
           point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)

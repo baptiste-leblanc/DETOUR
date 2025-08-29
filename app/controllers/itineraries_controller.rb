@@ -12,10 +12,12 @@ class ItinerariesController < ApplicationController
 
   end
 
-  # def show
-  #   @itinerary = Itinerary.find(params[:id])
-  #   authorize(@itinerary)
-  # end
+  def show
+    @itinerary = Itinerary.find(params[:id])
+    @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
+    @waypoints = sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)
+    authorize(@itinerary)
+  end
 
   private
 
