@@ -1,0 +1,22 @@
+
+<div style="position:relative" class="z-2">
+  <div class="bg-white position-absolute start-50 translate-middle" style= "top: 5%">
+
+  </div>
+
+  <div class="bg-white position-absolute start-50 translate-middle"  style= "bottom: 10%">
+    <div class="bg-white position-absolute start-50 translate-middle d-flex justify-content-between w-75 rounded-4" style= "bottom: 10%" data-controller="map">
+    <div >
+        <h4><span id="duration"></span></h4>
+        <h4><span id="distance"></span></h4>
+
+    </div>
+    <div>
+      <p>AAA</p>
+    </div>
+  </div>
+  </div>
+
+</div>
+
+<%= render "shared/map", waypoints: @waypoints %>
