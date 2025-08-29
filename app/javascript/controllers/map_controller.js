@@ -60,11 +60,11 @@ export default class extends Controller {
             type: "line",
             source: "route",
             layout: { "line-join": "round", "line-cap": "round" },
-            paint: { "line-color": "#161273", "line-width": 5 }
+            paint: { "line-color": "#161273", "line-width": 3 }
           });
 
           this.waypointsValue.forEach(waypoint => {
-            new mapboxgl.Marker({ color: '#161273' }).setLngLat(waypoint.location).addTo(this.map);
+            new mapboxgl.Marker({ color: '#f5d8ee ' }).setLngLat(waypoint.location).addTo(this.map);
           });
           const bounds = new mapboxgl.LngLatBounds();
           route.coordinates.forEach(c => bounds.extend(c));

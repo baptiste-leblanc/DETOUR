@@ -25,3 +25,15 @@
 body {
   background: rgb(255, 255, 255);
 }
+
+#map::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(79, 79, 79, 0.1);
+  pointer-events: none;
+  z-index: 1;
+}
