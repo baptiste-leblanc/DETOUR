@@ -10,17 +10,17 @@ input[type="radio"] {
 
 input[type="radio"] + label {
   width: 100%;
-  height: 75px;
+  height: 60px;
   padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 input[type="radio"]:checked + label {
   background:#000000;
-  border: 2px solid #bfe3a5;
+  border: 1px solid #bfe3a5;
   color: #bfe3a5;
   box-shadow: inset 4px 4px 8px #000000, inset -4px -4px 8px #000000;
 
@@ -31,7 +31,7 @@ input[type="radio"]:checked + label {
 }
 .main-text {
   font-size: 1em;
-  font-weight: bold;
+  font-weight: semi-bold;
 }
 
 .sub-text {
@@ -42,22 +42,22 @@ input[type="radio"]:checked + label {
 
 .direct {
  background: white;
- border: 1px solid black;
+ border: 1px solid #cacaca;
 }
 
 .max-10 {
 background: #f5d8ee;
-border: 1px solid black;
+border: 1px solid #cacaca;
 }
 
 .max-20 {
 background: #bc8dc4;
-border: 1px solid black;
+border: 1px solid #cacaca;
 }
 
 .long-scroll {
   color: #ffffff;
-  border: 1px solid black;
+  border: 1px solid #cacaca;
   background: #161273;
 }
 
