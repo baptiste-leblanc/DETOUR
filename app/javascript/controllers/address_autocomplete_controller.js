@@ -3,11 +3,11 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 
 // Connects to data-controller="address-autocomplete"
 export default class extends Controller {
-  static values = { apiKey: String }
+  static values = { apiKey: String, identifier: String }
 
   static targets = ["address"]
-  connect() {
 
+  connect() {
     this.geocoder = new MapboxGeocoder({
       enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",
@@ -18,7 +18,10 @@ export default class extends Controller {
     })
 
     this.geocoder.addTo(this.element)
-    this.geocoder.on("result", event => this.#setInputValue(event))
+    this.geocoder.on("result", event => {
+      this.#setInputValue(event)
+      this.dispatch("inputFilled", { detail: this.identifierValue })
+    })
     this.geocoder.on("clear", () => this.#clearInputValue())
 
 

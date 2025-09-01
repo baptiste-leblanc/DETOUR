@@ -20,7 +20,7 @@ export default class extends Controller {
 
     this.map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/gaelroussel/cmf0u6wzg00cm01sbgwopdjnd",
+      style: "mapbox://styles/gaelroussel/cmf0u6wzg00cm01sbgwopdjnd/draft",
       center: [2.3522, 48.8566],
       zoom: 12
     });
