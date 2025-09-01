@@ -1,53 +1,50 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
   require "uri"
+  require 'net/http'
 
-  def create
+def create
+  @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
+  @itinerary_objective.user = current_user
+  authorize(@itinerary_objective)
 
-    @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
-    @itinerary_objective.user = current_user
-    authorize(@itinerary_objective)
+  count = 0
+  if @itinerary_objective.save
+    area_for_POIs = corridor_polygon(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+    pois_area_coords = area_for_POIs[:geometry][:coordinates].first
 
-    count = 0
-    if @itinerary_objective.save
-      filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
+    pois_in_db = Address.where(address_type: "poi").in_bounding_box(pois_area_coords)
+
+    if pois_in_db.count > 20
+      # situation 1: on a déjà plus de 20 POIs dans la zone donc on va juste les classifier
+      filtered_pois_collection = classify_pois(pois_in_db)
       filtered_pois_collection.each do |poi_collection|
-
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
         poi_collection["points_of_interest"].each do |poi|
-          address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
+          point_of_interest = PointOfInterest.find_by_name(poi)
+          ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
+        end
+      end
+    else
+      # situation 2: on en a moins donc on va en générer
+      filtered_pois_collection = generate_POIs(area_for_POIs)
+      filtered_pois_collection.each do |poi_collection|
+        itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
+
+        poi_collection["points_of_interest"].each do |poi|
+          address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"], address_type: "poi")
           point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
-
-
-        @itinerary = itinerary if count == 0
-        count += 1
       end
-      redirect_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective)
-    else
-      redirect_to itinerary_objective_path
     end
+
+    redirect_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective)
+  else
+    redirect_to itinerary_objective_path
   end
-  end
+end
 
-
-  # def edit
-  #   @itinerary_objective = ItineraryObjective.find(params[:id])
-  #   authorize @itinerary_objective
-  # end
-
-  # def update
-  #   @itinerary_objective = ItineraryObjective.find(params[:id])
-  #   authorize @itinerary_objective
-
-
-  #   if @itinerary_objective.update(address_params)
-  #     redirect_to @itinerary_objective
-  #   else
-  #     render :edit
-  #   end
-  # end
 
   private
 
@@ -140,7 +137,46 @@ class ItineraryObjectivesController < ApplicationController
     inside
   end
 
-  def generate_POIs(start_lat, start_lon, end_lat, end_lon)
+  def classify_pois(pois_in_db)
+    # on extrait les noms de POIs pour mon prompt
+    list_of_id = pois_in_db.pluck(:id).map do |poi|
+      poi = PointOfInterest.find_by_address_id(poi)["name"]
+    end
+    chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
+    prompt = "Here is the list of POIs: #{list_of_id}"
+    system_prompt = <<~PROMPT
+    Context:
+    User will provide a list of Points of Interest (POIs) in GeoJSON format. These POIs will be used to design a pleasant walking itinerary (trendy, photogenic, enjoyable).
+
+    Task:
+    Classify the POIs into exactly 4 themes:
+    -Theme 1: containing the must-sees POIs to create the most pleasant itinerary
+    -Themes 2–4: other themes based on POIs’ nature (e.g., historical, cultural, leisure, food, shopping, nature).
+
+    Rules:
+    Each theme must contain 7–10 POIs (never fewer than 7, never more than 10).
+    A POI may appear in multiple themes.
+
+    Output format:
+    Return pure JSON only (no explanations, no comments, no extra text).
+    Top-level key:
+    -{ "POIs_collection": [ ... ] }
+    -"POIs_collection" must be an array of 4 objects.
+
+    Each object must contain:
+    -theme_name (string): 3-5 words summarizing the essence of the itinerary
+    -theme_description (string): sentence of 20-30 words to sell the itinerary to the user explaining why this itenerary offers the most pleasant (trendy, photogenic, enjoyable...) trip .
+    -points_of_interest (array of 7–10 POI objects)
+
+    Do not include any other keys, metadata, or comments.
+    PROMPT
+    response = chat.with_instructions(system_prompt).ask(prompt)
+    pois_collection = JSON.parse(response.content)["POIs_collection"]
+  end
+
+  def generate_POIs(area_for_POIs)
+    # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
+
     chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
     system_prompt = <<~PROMPT
       Rules:
@@ -183,8 +219,6 @@ class ItineraryObjectivesController < ApplicationController
       "points_of_interest" must be an array of 5-15 POI objects.
       Do not include any other keys, metadata, or comments.
   PROMPT
-  area_for_POIs = corridor_polygon(start_lat, start_lon, end_lat, end_lon)
-# voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
   prompt = "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
   response = chat.with_instructions(system_prompt).ask(prompt)
   pois_collection = JSON.parse(response.content)["POIs_collection"]
@@ -209,3 +243,4 @@ class ItineraryObjectivesController < ApplicationController
     ordered_pois_serialized = URI.parse(url).read
     ordered_pois = JSON.parse(ordered_pois_serialized)
   end
+end
