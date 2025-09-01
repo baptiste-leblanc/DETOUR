@@ -1,6 +1,7 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
   require "uri"
+  require "net/http"
 
   def create
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
@@ -204,5 +205,56 @@ class ItineraryObjectivesController < ApplicationController
     url = "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/2.3469%2C48.8609%3B2.3522%2C48.8719%3B2.350867%2C48.866582%3B2.370867%2C48.876582?access_token=pk.eyJ1IjoidWJhcSIsImEiOiJjbWRwdWV3aXUwZGdyMmtxdzE3ZHB4YjU2In0.Y_ue11FiRja43Jm78jwPvA&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
     ordered_pois_serialized = URI.parse(url).read
     ordered_pois = JSON.parse(ordered_pois_serialized)
+  end
+
+  def total_duration(departure, arrival, pois)
+    api_key = ENV['MAPBOX_API_KEY']
+    base_url = "https://api.mapbox.com/directions/v5/mapbox/walking/"
+    coordinates = []
+    coordinates << "#{departure.longitude},#{departure.latitude};"
+
+    pois.each do |point|
+      coordinates << "#{point.address.longitude},#{point.address.latitude};"
+    end
+
+    coordinates << "#{arrival.longitude},#{arrival.latitude}"
+
+    coordinates << "?alternatives=false&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
+    string_coord = coordinates.join
+    url = "#{base_url}#{string_coord}"
+
+    response = Net::HTTP.get(URI(url))
+    data = JSON.parse(response)
+
+    (data["routes"][0]["duration"] / 60.0).round
+  end
+
+  def itinerary_duration(departure, arrival)
+    api_key = ENV['MAPBOX_API_KEY']
+    base_url = "https://api.mapbox.com/directions/v5/mapbox/walking/"
+    coords = "#{departure.longitude},#{departure.latitude};#{arrival.longitude},#{arrival.latitude}"
+    url = "#{base_url}#{coords}?alternatives=false&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
+    response = Net::HTTP.get(URI(url))
+    data = JSON.parse(response)
+    (data["routes"][0]["duration"] / 60.0).round
+  end
+
+  def pois_adjust(departure, arrival, poi_collection)
+    total_duration = total_duration(departure, arrival, poi_collection)
+    duration_added = 15
+    direct_duration = itinerary_duration(departure, arrival)
+    target_duration = duration_added + direct_duration
+    p "Direct duration : #{direct_duration}"
+    p "Target duration : #{target_duration}"
+    p "Total duration : #{total_duration}"
+    while total_duration > target_duration
+      if poi_collection[0]["points_of_interest"] != nil
+      poi_collection[0]["points_of_interest"].pop
+      total_duration = total_duration(departure, arrival, poi_collection)
+      p "Total duration : #{total_duration}"
+      return poi_collection
+      else
+        puts "blabla"
+    end
   end
 end

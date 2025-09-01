@@ -5,6 +5,7 @@ class ItinerariesController < ApplicationController
     @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
     @itinerary = @itinerary_objective.itineraries.first
     @waypoints = sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)
+    @duration = direct_duration(@itinerary_objective.departure_address, @itinerary_objective.arrival_address)
     authorize(@itinerary)
   end
 
@@ -63,22 +64,14 @@ class ItinerariesController < ApplicationController
 
     coords = "#{departure.longitude},#{departure.latitude};#{arrival.longitude},#{arrival.latitude}"
 
-    end_url = "?alternatives=false&continue_straight=true&geometries=geojson&overview=full&steps=false&"
+    end_url = "?alternatives=false&continue_straight=true&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
     full_url = "#{base_url}#{coords}#{end_url}"
 
-    begin
-      response = Net::HTTP.get(URI(full_url))
-      data = JSON.parse(response)
+    response = Net::HTTP.get(URI(full_url))
+    data = JSON.parse(response)
 
-      if data["trips"] && data["trips"][0] && data["trips"][0]["duration"]
-        duration_seconds = data["trips"][0]["duration"]
-        duration_minutes = (duration_seconds / 60.0).round
+    duration_seconds = data["routes"][0]["duration"]
+    duration_minutes = (duration_seconds / 60.0).round
 
-        puts "Durée estimée du trajet : #{duration_minutes} minutes"
-      end
-    rescue JSON::ParserError => e
-      puts "Erreur de parsing JSON: #{e.message}"
-      return nil
-    end
   end
 end
