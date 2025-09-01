@@ -3,7 +3,6 @@ class ItineraryObjectivesController < ApplicationController
   require "uri"
 
   def create
-
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
     @itinerary_objective.user = current_user
     authorize(@itinerary_objective)
@@ -11,15 +10,15 @@ class ItineraryObjectivesController < ApplicationController
     count = 0
     if @itinerary_objective.save
       filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
-      filtered_pois_collection.each do |poi_collection|
 
+      filtered_pois_collection.each do |poi_collection|
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
+
         poi_collection["points_of_interest"].each do |poi|
           address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
           point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
-
 
         @itinerary = itinerary if count == 0
         count += 1
@@ -29,8 +28,6 @@ class ItineraryObjectivesController < ApplicationController
       redirect_to itinerary_objective_path
     end
   end
-  end
-
 
   # def edit
   #   @itinerary_objective = ItineraryObjective.find(params[:id])
@@ -40,7 +37,6 @@ class ItineraryObjectivesController < ApplicationController
   # def update
   #   @itinerary_objective = ItineraryObjective.find(params[:id])
   #   authorize @itinerary_objective
-
 
   #   if @itinerary_objective.update(address_params)
   #     redirect_to @itinerary_objective
@@ -209,3 +205,4 @@ class ItineraryObjectivesController < ApplicationController
     ordered_pois_serialized = URI.parse(url).read
     ordered_pois = JSON.parse(ordered_pois_serialized)
   end
+end

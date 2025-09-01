@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 
-// Connects to data-controller="address-autocomplete"
 export default class extends Controller {
   static values = { apiKey: String, identifier: String }
 
@@ -13,8 +12,12 @@ export default class extends Controller {
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
       types: "place,locality,neighborhood,address,poi",
-      proximity: this._userLocation(),
-      language: 'fr'
+      language: 'fr',
+      countries: 'fr',
+      proximity: {
+        longitude: 2.3522,
+        latitude: 48.8566
+      }
     })
 
     this.geocoder.addTo(this.element)
@@ -41,7 +44,6 @@ export default class extends Controller {
   }
 
   _userLocation() {
-    // récupère la position navigateur
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         this.geocoder.setProximity({
