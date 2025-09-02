@@ -22,7 +22,7 @@
     <div class="container-fluid">
       <% if user_signed_in? %>
       <div class="row" data-controller="toggle">
-        <nav class="opacity-0 z-n1 col-9 sidebar pt-3 bg-white h-100 position-absolute" data-toggle-target="hideable" style="transition: opacity 0.3s ease-in-out">
+        <nav class="opacity-0 z-n1 col-9 sidebar pt-3 bg-white h-100 position-absolute d-none" data-toggle-target="hideable" style="transition: opacity 0.3s ease-in-out">
           <%= render "shared/sidenav", itineraries: Itinerary.all %>
         </nav>
         <div class="col-md-10 my-4">
