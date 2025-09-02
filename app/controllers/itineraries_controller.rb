@@ -52,6 +52,19 @@ class ItinerariesController < ApplicationController
     data = JSON.parse(response)
 
     sorted_waypoints = data["waypoints"].sort_by { |waypoint| waypoint["waypoint_index"] }
+    # créer un each pour ajouter dans sorted waypoint les descriptions et noms que tu obtiendras via e.name et e.description
+
+    sorted_waypoints[0]["name"] = ""
+
+    pois.each_with_index do |poi, index|
+      if index + 1 < sorted_waypoints.length - 1
+        puts poi.inspect
+        sorted_waypoints[index + 1]["name"] = poi.name
+        sorted_waypoints[index + 1]["description"] = poi.description
+      end
+    end
+
+    sorted_waypoints[-1]["name"] = ""
 
     p sorted_waypoints
   end
@@ -72,6 +85,5 @@ class ItinerariesController < ApplicationController
 
     duration_seconds = data["routes"][0]["duration"]
     duration_minutes = (duration_seconds / 60.0).round
-
   end
 end

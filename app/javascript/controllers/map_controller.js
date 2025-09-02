@@ -1,14 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  // Set default empty array for waypoints
   static values = {
     apiKey: String,
     waypoints: { type: Array, default: [] }
   }
 
   connect() {
-
     if (this.map) return;
 
     if (!this.apiKeyValue) {
@@ -35,6 +33,8 @@ export default class extends Controller {
 
     this.map.on("load", () => {
       geolocate.trigger();
+
+      // console.log("Waypoints:", this.waypointsValue);
 
       const url = `https://api.mapbox.com/directions/v5/mapbox/walking/${this.waypointsValue.map(c => c.location.join(',')).join(';')}?geometries=geojson&overview=full&access_token=${this.apiKeyValue}`;
 
@@ -67,6 +67,7 @@ export default class extends Controller {
             type: "geojson",
             data: { type: "Feature", geometry: route }
           });
+
           this.map.addLayer({
             id: "route",
             type: "line",
@@ -75,10 +76,23 @@ export default class extends Controller {
             paint: { "line-color": "#161273", "line-width": 3 }
           });
 
+          // Ajout des markers avec popups
           this.waypointsValue.forEach(waypoint => {
-            new mapboxgl.Marker({ color: '#161273' })
+            const marker = new mapboxgl.Marker({ color: '#161273' })
               .setLngLat(waypoint.location)
               .addTo(this.map);
+
+            const popup = new mapboxgl.Popup({ offset: 25, closeOnClick: true, closeButton: true })
+              .setHTML(`
+                <div class="liquid-glass liquid-blob p-3">
+                  <h5 style="margin: 0 0 5px 0;">${waypoint.name || 'Point d\'intérêt'}</h5>
+                  <p style="margin: 0;font-size:16px;">${waypoint.description || ''}</p>
+                </div>
+              `);
+
+            if (waypoint.description || waypoint.name) {
+              marker.setPopup(popup);
+            }
           });
 
           const bounds = new mapboxgl.LngLatBounds();
