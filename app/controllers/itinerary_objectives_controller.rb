@@ -6,6 +6,7 @@ class ItineraryObjectivesController < ApplicationController
   def create
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
     @itinerary_objective.user = current_user
+    @duration_added =
     authorize(@itinerary_objective)
 
     count = 0
@@ -248,13 +249,13 @@ class ItineraryObjectivesController < ApplicationController
     p "Target duration : #{target_duration}"
     p "Total duration : #{total_duration}"
     while total_duration > target_duration
-      if poi_collection[0]["points_of_interest"] != nil
-      poi_collection[0]["points_of_interest"].pop
+      # if poi_collection[0]["points_of_interest"] != nil
+      poi_collection.pop
       total_duration = total_duration(departure, arrival, poi_collection)
       p "Total duration : #{total_duration}"
-      return poi_collection
-      else
-        puts "blabla"
+      # else
+      # p poi_collection
     end
+    return poi_collection
   end
 end

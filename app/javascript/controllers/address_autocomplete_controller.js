@@ -8,12 +8,11 @@ export default class extends Controller {
 
   connect() {
     this.geocoder = new MapboxGeocoder({
-      enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
+      enableGeolocation: this.agaddressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
       types: "place,locality,neighborhood,address,poi",
       language: 'fr',
-      countries: 'fr',
       proximity: {
         longitude: 2.3522,
         latitude: 48.8566
@@ -27,7 +26,22 @@ export default class extends Controller {
     })
     this.geocoder.on("clear", () => this.#clearInputValue())
 
+    // ⚡ Interception des résultats
+    this.geocoder.on("results", (e) => {
+      if (!e.features) return
 
+      // Exemple scoring simple : priorité aux résultats avec "France"
+      const scored = e.features.sort((a, b) => {
+        const aScore = this.#scoreFeature(a)
+        const bScore = this.#scoreFeature(b)
+        return bScore - aScore
+      })
+
+      // Remplace les features triées
+      e.features = scored
+    })
+
+    // Fix bouton geoloc
     this.element.querySelector("button.mapboxgl-ctrl-geocoder--button[aria-label=Geolocate]")?.setAttribute("type", "button")
   }
 
@@ -41,6 +55,18 @@ export default class extends Controller {
 
   #clearInputValue() {
     this.addressTarget.value = ""
+  }
+
+  #scoreFeature(feature) {
+    let score = 0
+    const name = feature.place_name.toLowerCase()
+
+    if (name.includes("france")) score += 50
+    if (feature.context?.some(c => c.text_fr === "France")) score += 50
+    if (feature.place_type.includes("address")) score += 10
+    if (feature.place_type.includes("locality")) score += 5
+
+    return score
   }
 
   _userLocation() {
