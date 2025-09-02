@@ -1,0 +1,53 @@
+/* Option 1: Hauteur fixe avec scroll automatique */
+.pois-list {
+  max-height: 140px; /* Ajustez selon vos besoins */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Option 2: Hauteur flexible (prend l'espace disponible) */
+.pois-list {
+  height: 100%;
+  max-height: 10vh; /* 60% de la hauteur de l'écran */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Option 3: Hauteur fixe en pixels */
+.pois-list {
+  height: 140px;
+  overflow-y: scroll; /* Force toujours l'apparition de la scrollbar */
+  overflow-x: hidden;
+}
+
+/* Styling optionnel pour améliorer l'apparence du scroll */
+.pois-list {
+  /* Votre choix de hauteur ci-dessus */
+  max-height: 140px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Améliorations visuelles */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Personnalisation de la scrollbar (Webkit uniquement - Chrome, Safari) */
+.pois-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pois-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0.5rem;
+}
+
+.pois-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 0.5rem;
+}
+
+.pois-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

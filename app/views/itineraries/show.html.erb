@@ -1,15 +1,20 @@
-  <div class="position-absolute start-50 translate-middle z-2 mt-3 px-3" style= "top: 7.5%; width: 80%">
-      <%= render "shared/address", itinerary_objective: @itinerary_objective %>
+<div class="position-relative col-12 col-sm-4 z-2 glass-card-background pe-4" style="height: -webkit-fill-available; padding: 1em 0px;">
+ <div class="py-5">
+  <div class="liquid-glass p-3 fixed-bottom col-12 col-sm-4 m-2">
+    <div class=" z-2 mt-3 px-3">
+    <%= render "shared/address", itinerary_objective: @itinerary_objective %>
   </div>
 
-  <div class="bg-white position-absolute start-50 translate-middle d-flex justify-content-between align-items-center rounded-4 z-2" style= "bottom: 5%; width:85%; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" data-controller="map">
+  <div class="rounded-4 z-2 d-flex justify-content-end" data-controller="map">
     <div>
-        <h4 class="my-1 ms-2"><strong><span id="duration"></span></strong></h4>
-        <p class="mb-1 ms-2"><span id="distance"></span></p>
+      <h4 class="my-1 ms-2"><strong><span id="duration"></span></strong></h4>
+      <p class="mb-1 ms-2"><span id="distance"></span></p>
     </div>
-    <div>
-      <%= link_to "Change my Detour", best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "text-white text-decoration-none bg-dark p-2 me-2 rounded-4"%>
+
+  <div class="btn text-white p-2 me-2 rounded-4 mt-3" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">      <%= link_to "Change my Detour", best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "text-decoration-none"%>
     </div>
   </div>
+  </div>
+</div>
 
 <%= render "shared/map", waypoints: @waypoints %>

@@ -1,4 +1,5 @@
-.bottom-sheet {
+.sheetbottom {
+  position: fixed;
   bottom: 1rem;
   left: 1rem;
   background: rgba(255, 255, 255, 0.3);
@@ -102,16 +103,3 @@
     min-width: auto;
   }
 }
-// .btn-outline-secondary {
-//   background: transparent;
-//   color: #6c757d;
-//   border-color: #6c757d;
-//   flex: 0 0 auto;
-//   min-width: 100px;
-// }
-
-// .btn-outline-secondary:hover {
-//   background: #6c757d;
-//   color: white;
-//   text-decoration: none;
-// }
