@@ -245,16 +245,13 @@ class ItineraryObjectivesController < ApplicationController
     duration_added = 15
     direct_duration = itinerary_duration(departure, arrival)
     target_duration = duration_added + direct_duration
-    p "Direct duration : #{direct_duration}"
-    p "Target duration : #{target_duration}"
-    p "Total duration : #{total_duration}"
+    # p "Direct duration : #{direct_duration}"
+    # p "Target duration : #{target_duration}"
+    # p "Total duration : #{total_duration}"
     while total_duration > target_duration
-      # if poi_collection[0]["points_of_interest"] != nil
       poi_collection.pop
       total_duration = total_duration(departure, arrival, poi_collection)
-      p "Total duration : #{total_duration}"
-      # else
-      # p poi_collection
+      # p "Total duration : #{total_duration}"
     end
     return poi_collection
   end
