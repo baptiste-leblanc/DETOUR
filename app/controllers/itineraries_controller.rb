@@ -30,7 +30,7 @@ class ItinerariesController < ApplicationController
 
   def sort_waypoints(departure, arrival, pois)
     api_key = ENV['MAPBOX_API_KEY']
-    base_url = "https://api.mapbox.com/optimized-trips/v/mapbox/walking/"
+    base_url = "https://api.mapbox.com/optimized-trips/v1/mapbox/walking/"
 
     # Each
 
