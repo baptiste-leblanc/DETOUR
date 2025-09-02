@@ -1,0 +1,92 @@
+.liquid-glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(188, 141, 196, 0.25);
+  overflow-y: visible;
+  border: 1px solid #bc8dc4;
+}
+
+.liquid-glass::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 255, 255, 0.4),
+    transparent 70%
+  );
+  transform: rotate(25deg);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Form tweaks */
+.liquid-glass input,
+.liquid-glass .btn {
+  border-radius: 0.75rem;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+.liquid-glass label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:75px;
+  width: 100%;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.047);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease-in-out;
+  text-align: center;
+  color: #161273;
+}
+
+/* Active (checked) state */
+.liquid-glass input[type="radio"]:checked + label {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+.liquid-glass .main-text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: block;
+}
+
+.liquid-glass .sub-text {
+  font-size: 0.7rem;
+  opacity: 0.85;
+  color: #161273;
+}
+
+glass-card-background {
+  background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+}
+
+.go {
+  color: #161273;
+  width: 75px;
+  background-color: #aadc9e;
+  border: 1px solid #161273;
+}
+
+.go:hover {
+  color: #161273;
+  width: 75px;
+  background-color: #c1d9bc;
+}
