@@ -2,6 +2,7 @@ class ItineraryObjectivesController < ApplicationController
   require "json"
   require "uri"
   require 'net/http'
+  require 'concurrent-ruby'
 
 def create
   @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
@@ -27,13 +28,11 @@ def create
       end
     else
       # situation 2: on en a moins donc on va en générer
-      filtered_pois_collection = generate_POIs(area_for_POIs)
+      filtered_pois_collection = generate_POIs(area_for_POIs, pois_in_db)
       filtered_pois_collection.each do |poi_collection|
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
-
-        poi_collection["points_of_interest"].each do |poi|
-          address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"], address_type: "poi")
-          point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
+        poi_collection["poi_names"].each do |poi|
+          point_of_interest = PointOfInterest.find_by_name(poi)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
       end
@@ -121,6 +120,7 @@ end
 
   def point_in_polygon?(point, polygon)
     x, y = point
+      return false if x.nil? || y.nil?
     inside = false
     j = polygon.size - 1
 
@@ -174,66 +174,112 @@ end
     pois_collection = JSON.parse(response.content)["POIs_collection"]
   end
 
-  def generate_POIs(area_for_POIs)
+  def generate_POIs(area_for_POIs, pois_in_db)
     # voici le code que j'utilise pour tester dans la colonne: area_for_POIs = corridor_polygon(48.8568781,2.3483592,48.8693002,2.3542855)
 
     chat = RubyLLM.chat(model: "gpt-4o").with_params(response_format: { type: 'json_object'})
     system_prompt = <<~PROMPT
+      Context:
+      User will provide:
+      - a list of existing Points of Interest (POIs) in an array
+      - the number of extra POIs to retrieve
+      - a search area in GeoJSON format
+
+      Task:
+      1. Retrieve the extra POIs.
+        - POIs must be existing, real places inside the search area.
+        - They should enhance a pleasant walking itinerary (trendy, photogenic, enjoyable).
+        - Include streets, small parks, squares, cafés, galleries, boutiques, and monuments.
+        - Prefer authentic, unique, or hidden gems over mainstream tourist attractions.
+
+      2. Classify all POIs (existing + extra) into exactly 4 themes:
+        - Theme 1: must-see POIs for the most pleasant itinerary
+        - Themes 2–4: other themes by nature (historical, cultural, leisure, food, shopping, nature)
+
+      Output format:
+      - Pure JSON only (no text, no explanations, no comments).
+      - Top-level keys:
+        1. "POIs_collection" = array of 4 objects
+          - Each object contains:
+            - theme_name (string, 3–5 words)
+            - theme_description (string, one sentence, 20–30 words, explaining why this itinerary is enjoyable)
+            - poi_names (array of strings: names of all POIs in this theme)
+        2. "New_POIs" = array of the extra POIs generated, each including:
+            - name (string)
+            - address (string)
+            - description (string, one sentence, 20–30 words, selling why it is enjoyable)
+            - category (string)
       Rules:
-      1. Point of interest (POI) definition (mandatory):
-      A POI is not limited to monuments or museums: it can also be a street, park, square, dead end, passageway, bridge, public place, natural spot, restaurant, café, or shop.
-      Always prioritize outstanding, visually attractive, and photogenic POIs that enhance the enjoyment of the route.
-      The ultimate goal is to make the itinerary as aesthetic, memorable, and camera‑worthy as possible.
-      2. Geographical constraint (mandatory):
-      Only return POIs strictly inside the rectangle defined by the 4 coordinates, given by Mapbox.
-      Exclude any POI outside or exactly on the rectangle’s edges.
-      The midpoint of the edge between points 1 and 2 = departure point.
-      The midpoint of the edge between points 3 and 4 = arrival point.
-      Never extrapolate, infer or approximate locations: use only validated POIs inside the rectangle.
-      3. Theme constraint (optional):
-      If a "theme" field is provided, return only POIs coherent with both the theme and the POI definition constraint.
-      If no "theme" is provided, return only POIs relevant to the "best POIs" theme.
-      4. Quantity constraint:
-      Each theme must contain between 5 and 15 POIs inclusive.
-      Never return fewer than 5 or more than 15 POIs per theme.
-      If there are fewer than 5 valid POIs inside the rectangle for a theme, that theme must be omitted and replaced by another coherent category (to always ensure 4 themes with 5–15 POIs each).
-      Never invent, hallucinate, or approximate data.
-      5. Data format constraint:
-      POIs must be grouped into exactly 4 themes:
-      - Theme 1: "best POIs" (mandatory, first group, containing the top photogenic POIs).
-      - Themes 2–4: categories based on POIs’ nature (e.g., historical, cultural, leisure, food, shopping, nature).
-      Each theme must include:
-      - theme_name (string, ≤7 words; the first must be "best POIs")
-      - theme_description (string, ≤12 words)
-      - points_of_interest (array of 5–15 POI objects)
-      Each POI must include exactly:
-      - name (string)
-      - location (object) containing: full_address (string), latitude (float) and longitude (float)
-      - description (string, ≤15 words, concise)
-      - category (string)
-      6. Output constraint:
-      The output must be pure JSON only (no explanations, no comments, no text before/after).
-      The top-level key must be { "POIs_collection": [ ... ] }
-      "POIs_collection" must be an array of 4 theme objects.
-      Each theme object must have theme_name, theme_description, and points_of_interest.
-      "points_of_interest" must be an array of 5-15 POI objects.
-      Do not include any other keys, metadata, or comments.
+      - Exactly 4 themes (no more, no less)
+      - Each theme must contain 7–10 POIs (POIs can appear in multiple themes)
+      - Do not include any keys, metadata, or fields outside of what is specified
   PROMPT
-  prompt = "To enjoy my itinerary, I need some points of interests located inside the rectangle whose 4 corners are represented by the 4 first coordinates below : #{area_for_POIs}"
+  pois_in_db = pois_in_db.map do |poi|
+    poi = PointOfInterest.find_by_address_id(poi.id)["name"]
+  end
+  prompt = <<~PROMPT
+      Existing list of POIs : #{pois_in_db}
+      Number of extra POIs to generate : #{20 - pois_in_db.count}
+      Search area for extra POIs to generate : #{area_for_POIs}
+      PROMPT
   response = chat.with_instructions(system_prompt).ask(prompt)
-  pois_collection = JSON.parse(response.content)["POIs_collection"]
+  # on filtre les coordonnées des POIs nouvellement créées
+  pois_new = JSON.parse(response.content)["New_POIs"]
+
+  access_token = ENV["MAPBOX_API_KEY"]
+  pois_new_address = pois_new.map { |poi| poi["address"] }
+
+  pois_new_address_coordinates = Concurrent::Promise.zip(*pois_new_address.map do |poi|
+    Concurrent::Promise.execute do
+      encoded_poi = CGI.escape(poi)
+      uri = URI("https://api.mapbox.com/geocoding/v5/mapbox.places/#{encoded_poi}.json?access_token=#{access_token}")
+      res = Net::HTTP.get(uri)
+      feature = JSON.parse(res)["features"].first
+      {
+        "location" => {
+          "full_address" => feature["place_name"],
+          "latitude" => feature["geometry"]["coordinates"][1],
+          "longitude" => feature["geometry"]["coordinates"][0]
+        }
+      }end
+    end).value!
+
+    pois_new_with_location = pois_new.each do |poi|
+      pois_new_address_coordinates.each do |poi_location|
+        poi["location"] = {
+          "full_address" => poi_location["location"]["full_address"],
+          "latitude" => poi_location["location"]["latitude"],
+          "longitude" => poi_location["location"]["longitude"]
+        }
+      end
+    end
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
-  filtered_pois_collection = pois_collection.each do |poi_collection|
-    poi_collection["points_of_interest"].select do |poi|
-      lat = poi["location"]["latitude"]
-      lon = poi["location"]["longitude"]
-      point_in_polygon?([lon, lat], polygon)
+  pois_inside  = []
+  pois_outside = []
+
+  pois_new_with_location.each do |poi|
+    lat = poi["location"]["latitude"]
+    lon = poi["location"]["longitude"]
+    if point_in_polygon?([lon, lat], polygon)
+      pois_inside << poi
+    else
+      pois_outside << poi
     end
   end
+
+  # Crée les addresses et points d'intérêt en db pour les nouveaux POIs
+  pois_inside.each do |poi|
+    address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"], address_type: "poi")
+    point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
   end
 
+  # Retire les POIs en dehors de la zone
+  pois_collections = JSON.parse(response.content)["POIs_collection"]
+  pois_collections.each do |collection|
+    collection["poi_names"].reject! { |poi_name| pois_outside.include?(poi_name) }
+  end
+  end
   # END: Code permettant de générer une zone de points d'intérêts
- # BAPTISTE BOUGER EN SHOW d'itinerary
   def order_waypoints(start_lat, start_lon, end_lat, end_lon, filtered_pois)
     url =
     filtered_pois.each do |poi|
