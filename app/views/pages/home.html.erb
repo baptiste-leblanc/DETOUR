@@ -1,7 +1,7 @@
-<div style="position:relative" id="search" class="col-12 col-sm-4 z-2 glass-card-background" data-controller="form-visibility" data-action="address-autocomplete:inputFilled->form-visibility#toggleVisibility">
+<div style="position:fixed" id="search" class="col-12 col-sm-4 z-2 glass-card-background" data-controller="form-visibility" data-action="address-autocomplete:inputFilled->form-visibility#toggleVisibility">
 
-<div class="container py-5">
-  <div class="liquid-glass liquid-blob p-3">
+<div class="py-5" style="margin-right: 1.5em">
+  <div class="liquid-glass p-3">
 
  <%= simple_form_for @itinerary_objective do |f| %>
     <%= f.simple_fields_for :departure_address, Address.new do |g| %>
