@@ -1,8 +1,3 @@
-<!-- Adresses en haut (identique à best_itinerary) -->
-<div class="position-absolute start-50 translate-middle z-2 mt-3 px-3" style="top: 7.5%; width: 80%">
-  <%= render "shared/address", itinerary_objective: @itinerary_objective %>
-</div>
-
 <!-- Carrousel à la place du Bottom Sheet -->
 <div class="alternatives-carousel z-2">
   <!-- Header du carrousel -->
@@ -11,7 +6,7 @@
     <p class="carousel-subtitle">Swipe to explore different themed itineraries</p>
   </div>
   <!-- Carrousel Bootstrap -->
-  <div id="alternativesCarousel" class="carousel slide" data-bs-interval="false">
+  <div id="alternativesCarousel" class="carousel slide" data-bs-interval="false" data-controller="carousel">
 
     <!-- Indicateurs -->
     <div class="carousel-indicators custom-indicators">
@@ -32,7 +27,7 @@
 
             <div class="card-header">
               <h3 class="itinerary-theme">
-                📍 <%= itinerary.theme.capitalize %>: ⏱ <span id="duration"></span> - 📏 <span id="distance"></span>
+                🗺️<%= itinerary.theme.capitalize %> ⏱ <span class="duration"></span> - 🛣️ <span class="distance"></span>
               </h3>
             </div>
 
@@ -56,7 +51,7 @@
 
                   <% if itinerary.point_of_interests.count > 3 %>
                     <div class="more-pois">
-                      +<%= itinerary.point_of_interests.count - 3 %> more outstanding stops
+                      +<%= itinerary.point_of_interests.count - 3 %> more outstanding stops 😎​
                     </div>
                   <% end %>
                 </div>
@@ -95,4 +90,6 @@
 
 </div>
 <!-- Carte en arrière-plan (identique à best_itinerary) -->
-<%= render "shared/map", waypoints: @waypoints %>
+<div class="alternative-itinerary-container">
+  <%= render "shared/map", waypoints: @waypoints %>
+</div>

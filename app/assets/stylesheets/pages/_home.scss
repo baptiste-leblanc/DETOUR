@@ -12,6 +12,15 @@ body {
   z-index:0
 }
 
+.alternative-itinerary-container #map {
+  position:fixed;
+  inset: 0;
+  width: 100%;
+  height: 45%;
+  z-index:0
+}
+
+
 .form-div {
   position:relative;
   z-index:3;

@@ -27,7 +27,7 @@
 }
 
 .carousel-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
   text-align: center;
@@ -73,7 +73,7 @@
   }
 
   .itinerary-theme {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #2c3e50;
     margin-bottom: 0.5rem;
@@ -81,11 +81,10 @@
 
 .itinerary-stats {
   display: flex;
-    flex: 0 0 50%;       /* chaque enfant occupe 50% de la ligne = 2 colonnes */
+  flex: 0 0 50%;       /* chaque enfant occupe 50% de la ligne = 2 colonnes */
   text-align: center;  /* centre le contenu dans la colonne */
   padding: 0.5rem;     /* optionnel : un peu d’espace interne */
 }
-
 
   .stat-item {
     display: flex;
@@ -154,7 +153,7 @@
     color: #2c3e50;
   }
 
-  .poi-category {
+  .poi-description {
     font-size: 0.75rem;
     color: #6c757d;
   }

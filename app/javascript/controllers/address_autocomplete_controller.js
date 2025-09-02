@@ -13,8 +13,9 @@ export default class extends Controller {
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
       types: "place,locality,neighborhood,address,poi",
-      proximity: this._userLocation(),
-      language: 'fr'
+      proximity: "ip",
+      language: 'fr',
+      countries: "fr"
     })
 
     this.geocoder.addTo(this.element)
