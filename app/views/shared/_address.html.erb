@@ -1,2 +1,8 @@
-<div class="mt-3 bg-white ps-2 pe-3 py-2 w-100 rounded-4" style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= itinerary_objective.departure_address["full_address"] %></div>
-<div class="mt-3 bg-white ps-2 pe-3 py-2 w-100 rounded-4" style="box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= itinerary_objective.arrival_address["full_address"] %></div>
+<div style="font-size:0.9rem">
+  <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758384/location-arrow-light-full_wj5pnf.svg" alt="departure icone" style="height: 16px; width: auto;">
+  <%= itinerary_objective.departure_address["full_address"] %>
+</div>
+<div style="font-size:0.9rem">
+  <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758381/location-dot-light-full_j9bzw9.svg" alt="arrival icone" style="height: 16px; width: auto;">
+  <%= itinerary_objective.arrival_address["full_address"] %>
+</div>

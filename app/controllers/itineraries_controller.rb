@@ -4,7 +4,7 @@ class ItinerariesController < ApplicationController
   def best_itinerary
     @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
     @itinerary = @itinerary_objective.itineraries.first
-    @waypoints = sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)
+    @waypoints = [sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)]
     @duration = direct_duration(@itinerary_objective.departure_address, @itinerary_objective.arrival_address)
     authorize(@itinerary)
   end
@@ -15,8 +15,14 @@ class ItinerariesController < ApplicationController
     authorize(@itinerary)
   end
 
+  # pour reprendre les itinéraires alternatifs
   def alternative_itinerary
-
+    @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
+    @itineraries = @itinerary_objective.itineraries[1..-1]
+    @waypoints = @itineraries.map do |itinerary|
+       sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, itinerary.point_of_interests)
+    end
+    authorize(@itineraries.first)
   end
 
   def show

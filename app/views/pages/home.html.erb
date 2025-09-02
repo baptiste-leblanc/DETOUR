@@ -1,7 +1,7 @@
-<div style="position:relative" id="search" class="col-12 col-sm-4 z-2 glass-card-background" data-controller="form-visibility" data-action="address-autocomplete:inputFilled->form-visibility#toggleVisibility">
+<div style="position:fixed" id="search" class="col-12 col-sm-4 z-2 glass-card-background" data-controller="form-visibility" data-action="address-autocomplete:inputFilled->form-visibility#toggleVisibility">
 
-<div class="container py-5">
-  <div class="liquid-glass liquid-blob p-3">
+<div class="py-5" style="margin-right: 1.5em">
+  <div class="liquid-glass p-3">
 
  <%= simple_form_for @itinerary_objective do |f| %>
     <%= f.simple_fields_for :departure_address, Address.new do |g| %>
@@ -39,7 +39,53 @@
           label: false %>
     <% end %>
 
-    <div id="ctas" class="row d-none" data-form-visibility-target="detourCtas">
+<div id="ctas" class="row d-none" data-form-visibility-target="detourCtas">
+
+  <div class="col-6 mb-3">
+    <%= f.radio_button :duration_objective, "0", id: "option1" %>
+    <label for="option1" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
+      <div>
+        <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757591/arrow-right-from-line-light-full_h7hbpb.svg" alt="" style="width: 20px">
+        <span class="main-text direct">Direct</span>
+      </div>
+    </label>
+  </div>
+
+  <div class="col-6">
+    <%= f.radio_button :duration_objective, "10", id: "option2" %>
+    <label for="option2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
+      <div>
+        <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757082/wave-sine-light-full_gf3bnl.svg" alt="" style="width: 20px">
+        <span class="main-text max-10">Short Detour</span>
+        <span class="sub-text">max 10 minutes</span>
+      </div>
+    </label>
+  </div>
+
+  <div class="col-6">
+    <%= f.radio_button :duration_objective, "20", id: "option3" %>
+    <label for="option3" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
+      <div>
+        <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757082/wave-square-light-full_en7p0i.svg" alt="" style="width: 20px">
+        <span class="main-text max-20">Long Detour</span>
+        <span class="sub-text">max 20 minutes</span>
+      </div>
+    </label>
+  </div>
+
+  <div class="col-6">
+    <%= f.radio_button :duration_objective, "30", id: "option4" %>
+    <label for="option4" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
+      <div>
+        <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757082/wave-triangle-light-full_mapesf.svg" alt="" style="width: 20px">
+        <span class="main-text long-scroll">Long Scroll</span>
+        <span class="sub-text">+ 30 min</span>
+      </div>
+    </label>
+  </div>
+</div>
+
+    <%# <div id="ctas" class="row d-none" data-form-visibility-target="detourCtas">
 
       <div class="col-6 mb-3">
         <input type="radio" id="option1" name="choice" value="1">
@@ -82,7 +128,7 @@
               <span class="sub-text">+ 30 min</span>
             </div>
           </label>
-        </div>
+        </div> %>
 
 
       <div class="d-flex justify-content-end w-100">
