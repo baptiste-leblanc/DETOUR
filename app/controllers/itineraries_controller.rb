@@ -5,6 +5,13 @@ class ItinerariesController < ApplicationController
     @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
     @itinerary = @itinerary_objective.itineraries.first
     @waypoints = [sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)]
+    @duration = direct_duration(@itinerary_objective.departure_address, @itinerary_objective.arrival_address)
+    authorize(@itinerary)
+  end
+
+  def direct_itinerary
+    @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
+    @itinerary = @itinerary_objective.itineraries.first
     authorize(@itinerary)
   end
 
@@ -28,8 +35,6 @@ class ItinerariesController < ApplicationController
   private
 
   def sort_waypoints(departure, arrival, pois)
-
-    departure.longitude
     api_key = ENV['MAPBOX_API_KEY']
     base_url = "https://api.mapbox.com/optimized-trips/v1/mapbox/walking/"
 
@@ -45,7 +50,7 @@ class ItinerariesController < ApplicationController
     coordinates << "#{arrival.longitude},#{arrival.latitude}"
 
     coordinates << "?access_token=#{api_key}&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
-    string_coord = coordinates.join("")
+    string_coord = coordinates.join
     url = "#{base_url}#{string_coord}"
     # url = "https://api.mapbox.com/optimized-trips/v1/mapbox/walking/2.3469%2C48.8609%3B2.3522%2C48.8719%3B2.350867%2C48.866582%3B2.370867%2C48.876582?access_token=#{api_key}&overview=full&geometries=geojson&roundtrip=false&source=first&destination=last"
 
@@ -57,7 +62,22 @@ class ItinerariesController < ApplicationController
     p sorted_waypoints
   end
 
-  def set_duration
+  # https://api.mapbox.com/directions/v5/mapbox/walking/2.342542%2C48.860393%3B2.332116%2C48.877463?alternatives=false&continue_straight=true&geometries=geojson&overview=full&steps=false&access_token=pk.eyJ1IjoiYmFwdGkiLCJhIjoiY21kd3dnNWN6MWM2dTJtcXk1emM2YjRlYSJ9.Yl4EyIRYufUcEQVudpKhoQ
+
+  def direct_duration(departure, arrival)
+    api_key = ENV['MAPBOX_API_KEY']
+    base_url = "https://api.mapbox.com/directions/v5/mapbox/walking/"
+
+    coords = "#{departure.longitude},#{departure.latitude};#{arrival.longitude},#{arrival.latitude}"
+
+    end_url = "?alternatives=false&continue_straight=true&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
+    full_url = "#{base_url}#{coords}#{end_url}"
+
+    response = Net::HTTP.get(URI(full_url))
+    data = JSON.parse(response)
+
+    duration_seconds = data["routes"][0]["duration"]
+    duration_minutes = (duration_seconds / 60.0).round
 
   end
 end
