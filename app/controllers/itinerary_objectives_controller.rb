@@ -9,21 +9,28 @@ def create
   @itinerary_objective.user = current_user
   authorize(@itinerary_objective)
 
-  count = 0
   if @itinerary_objective.save
     area_for_POIs = corridor_polygon(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
     pois_area_coords = area_for_POIs[:geometry][:coordinates].first
 
     pois_in_db = Address.where(address_type: "poi").in_bounding_box(pois_area_coords)
 
+    departure = @itinerary_objective.departure_address
+    arrival = @itinerary_objective.arrival_address
+    duration_objective = @itinerary_objective.duration_objective
+
     if pois_in_db.count > 20
       # situation 1: on a déjà plus de 20 POIs dans la zone donc on va juste les classifier
       filtered_pois_collection = classify_pois(pois_in_db)
       filtered_pois_collection.each do |poi_collection|
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
-
+        poi_coord = []
         poi_collection["points_of_interest"].each do |poi|
-          point_of_interest = PointOfInterest.find_by_name(poi)
+          poi_coord << Address.find(PointOfInterest.find_by_name(poi).address_id)
+        end
+        filtered_pois = pois_adjust(departure, arrival, poi_coord, duration_objective)
+        filtered_pois.each do |poi_address|
+          point_of_interest = PointOfInterest.find_by_address_id(poi_address.id)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
       end
@@ -31,9 +38,16 @@ def create
       # situation 2: on en a moins donc on va en générer
       filtered_pois_collection = generate_POIs(area_for_POIs, pois_in_db)
       filtered_pois_collection.each do |poi_collection|
+        poi_coord = []
+        poi_collection["poi_names"].each do |poi_name|
+          poi_coord << Address.find(PointOfInterest.find_by_name(poi_name).address_id)
+        end
+
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
-        poi_collection["poi_names"].each do |poi|
-          point_of_interest = PointOfInterest.find_by_name(poi)
+
+        filtered_pois = pois_adjust(departure, arrival, poi_coord, duration_objective)
+        filtered_pois.each do |poi_address|
+          point_of_interest = PointOfInterest.find_by_address_id(poi_address.id)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
       end
@@ -47,9 +61,10 @@ end
 
 
   private
-  
+
   def itinerary_objective_params
     params.require(:itinerary_objective).permit(
+      :duration_objective,
       departure_address_attributes: [:id, :full_address],
       arrival_address_attributes: [:id, :full_address]
     )
@@ -280,7 +295,8 @@ end
     collection["poi_names"].reject! { |poi_name| pois_outside.include?(poi_name) }
   end
   end
-  # END: Code permettant de générer une zone de points d'intérêts
+  # END: Code permettant de générer les points d'intérêts dans la zone
+
   def order_waypoints(start_lat, start_lon, end_lat, end_lon, filtered_pois)
     url =
     filtered_pois.each do |poi|
@@ -298,7 +314,7 @@ end
     coordinates << "#{departure.longitude},#{departure.latitude};"
 
     pois.each do |point|
-      coordinates << "#{point.address.longitude},#{point.address.latitude};"
+      coordinates << "#{point.longitude},#{point.latitude};"
     end
 
     coordinates << "#{arrival.longitude},#{arrival.latitude}"
@@ -323,18 +339,15 @@ end
     (data["routes"][0]["duration"] / 60.0).round
   end
 
-  def pois_adjust(departure, arrival, poi_collection)
+  def pois_adjust(departure, arrival, poi_collection, duration_objective)
     total_duration = total_duration(departure, arrival, poi_collection)
-    duration_added = 15
     direct_duration = itinerary_duration(departure, arrival)
-    target_duration = duration_added + direct_duration
-    # p "Direct duration : #{direct_duration}"
-    # p "Target duration : #{target_duration}"
-    # p "Total duration : #{total_duration}"
+    target_duration = duration_objective + direct_duration
+
     while total_duration > target_duration
       poi_collection.pop
       total_duration = total_duration(departure, arrival, poi_collection)
-      # p "Total duration : #{total_duration}"
+
     end
     return poi_collection
   end
