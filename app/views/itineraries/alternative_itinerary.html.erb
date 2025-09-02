@@ -8,15 +8,6 @@
   <!-- Carrousel Bootstrap -->
   <div id="alternativesCarousel" class="carousel slide " data-bs-interval="false" data-controller="carousel">
 
-    <!-- Indicateurs -->
-    <div class="carousel-indicators custom-indicators">
-      <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
-        <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
-                class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
-        </button>
-      <% end %>
-    </div>
-
     <!-- Contenu du carrousel -->
     <div class="carousel-inner">
       <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
@@ -64,6 +55,15 @@
             </div>
           </div>
         </div>
+      <% end %>
+    </div>
+
+    <!-- Indicateurs -->
+    <div class="carousel-indicators custom-indicators">
+      <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
+        <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
+                class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
+        </button>
       <% end %>
     </div>
 
