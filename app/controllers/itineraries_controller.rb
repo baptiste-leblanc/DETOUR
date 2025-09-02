@@ -8,8 +8,12 @@ class ItinerariesController < ApplicationController
     authorize(@itinerary)
   end
 
+  # pour reprendre les itinéraires alternatifs
   def alternative_itinerary
-
+    @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
+    @itineraries = @itinerary_objective.itineraries[1..-1]
+    @waypoints = sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itineraries.first.point_of_interests)
+    authorize(@itineraries.first)
   end
 
   def show

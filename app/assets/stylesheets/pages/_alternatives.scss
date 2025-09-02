@@ -1,0 +1,250 @@
+.alternatives-carousel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2rem 2rem 0 0;
+  padding: 1.5rem;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+  max-height: 65vh;
+  overflow: hidden;
+}
+
+.carousel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.flaneur-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.carousel-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.carousel-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin: 0.25rem 0 0 0;
+  text-align: center;
+}
+
+/* Indicateurs personnalisés */
+  .custom-indicators {
+    position: relative;
+    margin: 1rem 0;
+  }
+
+  .custom-indicators button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    margin: 0 4px;
+  }
+
+  .custom-indicators button.active {
+    background-color: white;
+  }
+
+  /* Cards d'itinéraires */
+  .itinerary-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 0 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-header {
+    margin-bottom: 1rem;
+  }
+
+  .itinerary-theme {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+.itinerary-stats {
+  display: flex;
+    flex: 0 0 50%;       /* chaque enfant occupe 50% de la ligne = 2 colonnes */
+  text-align: center;  /* centre le contenu dans la colonne */
+  padding: 0.5rem;     /* optionnel : un peu d’espace interne */
+}
+
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+
+  .stat-item i {
+    width: 12px;
+    color: #007bff;
+  }
+
+  .card-content {
+    margin-bottom: 1.5rem;
+  }
+
+  .itinerary-description {
+    color: #6c757d;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .pois-preview h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .pois-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .poi-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .poi-number {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .poi-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .poi-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .poi-category {
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+
+  .more-pois {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-style: italic;
+    margin-left: 2.75rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card-actions .btn {
+    font-weight: 500;
+  }
+
+  /* Contrôles du carrousel */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2c3e50;
+    opacity: 1;
+  }
+
+  .carousel-control-prev {
+    left: -20px;
+  }
+
+  .carousel-control-next {
+    right: -20px;
+  }
+
+  .carousel-control-prev:hover,
+  .carousel-control-next:hover {
+    background: white;
+    color: #007bff;
+  }
+
+  /* Bouton de retour */
+  .back-button-container {
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .alternatives-carousel {
+      padding: 1rem;
+      max-height: 70vh;
+    }
+
+    .itinerary-card {
+      margin: 0 0.25rem;
+      padding: 1rem;
+    }
+
+    .itinerary-stats {
+      justify-content: space-between;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 35px;
+      height: 35px;
+    }
+
+    .carousel-control-prev {
+      left: -15px;
+    }
+
+    .carousel-control-next {
+      right: -15px;
+    }
+  }
+
+  /* Animation de swipe pour mobile
+  @media (max-width: 768px) {
+    .carousel-inner {
+      touch-action: pan-x;
+    }
+  }
+    */
