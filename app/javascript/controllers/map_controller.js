@@ -9,7 +9,7 @@ export default class extends Controller {
 
   connect() {
 
-    if (this.map) return; // stop if map already exists
+    if (this.map) return;
 
     if (!this.apiKeyValue) {
       console.error("Missing Mapbox API key!");

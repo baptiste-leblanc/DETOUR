@@ -1,25 +1,26 @@
 class ItineraryObjectivesController < ApplicationController
   require "json"
   require "uri"
+  require "net/http"
 
   def create
-
     @itinerary_objective = ItineraryObjective.new(itinerary_objective_params)
     @itinerary_objective.user = current_user
+    @duration_added =
     authorize(@itinerary_objective)
 
     count = 0
     if @itinerary_objective.save
       filtered_pois_collection = generate_POIs(@itinerary_objective.departure_address.latitude, @itinerary_objective.departure_address.longitude, @itinerary_objective.arrival_address.latitude, @itinerary_objective.arrival_address.longitude)
-      filtered_pois_collection.each do |poi_collection|
 
+      filtered_pois_collection.each do |poi_collection|
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
+
         poi_collection["points_of_interest"].each do |poi|
           address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"])
           point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
           ItineraryPointOfInterest.create(point_of_interest: point_of_interest, itinerary: itinerary)
         end
-
 
         @itinerary = itinerary if count == 0
         count += 1
@@ -29,8 +30,6 @@ class ItineraryObjectivesController < ApplicationController
       redirect_to itinerary_objective_path
     end
   end
-  end
-
 
   # def edit
   #   @itinerary_objective = ItineraryObjective.find(params[:id])
@@ -40,7 +39,6 @@ class ItineraryObjectivesController < ApplicationController
   # def update
   #   @itinerary_objective = ItineraryObjective.find(params[:id])
   #   authorize @itinerary_objective
-
 
   #   if @itinerary_objective.update(address_params)
   #     redirect_to @itinerary_objective
@@ -209,3 +207,52 @@ class ItineraryObjectivesController < ApplicationController
     ordered_pois_serialized = URI.parse(url).read
     ordered_pois = JSON.parse(ordered_pois_serialized)
   end
+
+  def total_duration(departure, arrival, pois)
+    api_key = ENV['MAPBOX_API_KEY']
+    base_url = "https://api.mapbox.com/directions/v5/mapbox/walking/"
+    coordinates = []
+    coordinates << "#{departure.longitude},#{departure.latitude};"
+
+    pois.each do |point|
+      coordinates << "#{point.address.longitude},#{point.address.latitude};"
+    end
+
+    coordinates << "#{arrival.longitude},#{arrival.latitude}"
+
+    coordinates << "?alternatives=false&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
+    string_coord = coordinates.join
+    url = "#{base_url}#{string_coord}"
+
+    response = Net::HTTP.get(URI(url))
+    data = JSON.parse(response)
+
+    (data["routes"][0]["duration"] / 60.0).round
+  end
+
+  def itinerary_duration(departure, arrival)
+    api_key = ENV['MAPBOX_API_KEY']
+    base_url = "https://api.mapbox.com/directions/v5/mapbox/walking/"
+    coords = "#{departure.longitude},#{departure.latitude};#{arrival.longitude},#{arrival.latitude}"
+    url = "#{base_url}#{coords}?alternatives=false&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
+    response = Net::HTTP.get(URI(url))
+    data = JSON.parse(response)
+    (data["routes"][0]["duration"] / 60.0).round
+  end
+
+  def pois_adjust(departure, arrival, poi_collection)
+    total_duration = total_duration(departure, arrival, poi_collection)
+    duration_added = 15
+    direct_duration = itinerary_duration(departure, arrival)
+    target_duration = duration_added + direct_duration
+    # p "Direct duration : #{direct_duration}"
+    # p "Target duration : #{target_duration}"
+    # p "Total duration : #{total_duration}"
+    while total_duration > target_duration
+      poi_collection.pop
+      total_duration = total_duration(departure, arrival, poi_collection)
+      # p "Total duration : #{total_duration}"
+    end
+    return poi_collection
+  end
+end
