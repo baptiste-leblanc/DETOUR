@@ -10,7 +10,7 @@
     <div class="sheet-header">
       <%= image_tag "flaneur.png", alt: "Flâneur", class: "flaneur-icon" %>
       <h2 class="sheet-title">
-        Your itinerary: <span id="duration"></span> - <span id="distance"></span>
+        🚶‍♂️Your itinerary: ⏱ <span class="duration"></span> - 🛣️ <span class="distance"></span>
       </h2>
     </div>
 
@@ -33,6 +33,13 @@
     </div>
   </div>
 
+  <!-- Boutons -->
+  <div class="button-container">
+     <%= link_to "New itinerary", root_path, class: "btn btn-outline-secondary rounded-4 flex-fill order-3 order-sm-1"%>
+     <%= link_to "See alternatives", alternative_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "btn btn-secondary rounded-4 flex-fill order-2 order-sm-2"%>
+    <%= link_to "Go", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "btn btn-primary rounded-4 flex-fill order-1 order-sm-3"%>
+  </div>
+</div>
 </div>
 
 <%= render "shared/map", waypoints: @waypoints %>

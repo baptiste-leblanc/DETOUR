@@ -12,6 +12,8 @@ export default class extends Controller {
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
       types: "place,locality,neighborhood,address,poi",
+      language: 'fr',
+      countries: "fr",
       poi_category: "monument",
       language: 'fr',
       proximity: {

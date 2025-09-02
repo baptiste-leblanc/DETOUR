@@ -66,62 +66,82 @@
   margin-top: 8px;
 }
 
-/* Styles des boutons - compatible avec Bootstrap */
-.btn {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
+/* Responsive Buttons CSS */
+.button-container {
+  padding: 1rem;
+  background: white;
+  border-radius: 0 0 1rem 1rem;
 }
 
+/* Mobile First - Boutons empilés verticalement */
+.button-container .btn {
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Accessibilité tactile */
+}
+
+/* Bouton principal "Go" en évidence sur mobile */
 .btn-primary {
-  background: #161273;
-  color: white;
-  border-color: #161273;
-  flex: 1;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
 }
 
 .btn-primary:hover {
-  background: #161273;
-  border-color: #161273;
-  color: white;
-  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
 }
 
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-  border-color: #6c757d;
-  flex: 0 0 auto;
-  min-width: 120px;
-}
+/* Container des boutons avec marge uniforme */
+// .button-container {
+//   display: flex;
+//   gap: 12px;
+//   margin: 0; // Les marges sont gérées par le padding du conteneur
+// }
 
-.btn-secondary:hover {
-  background: #5a6268;
-  border-color: #545b62;
-  color: white;
-  text-decoration: none;
-}
+/* Styles des boutons - compatible avec Bootstrap */
+// .btn {
+//   padding: 12px 16px;
+//   border-radius: 8px;
+//   font-size: 14px;
+//   font-weight: 600;
+//   border: 1px solid transparent;
+//   cursor: pointer;
+//   transition: all 0.2s ease;
+//   text-align: center;
+//   text-decoration: none;
+//   display: inline-block;
+// }
 
-.btn-outline-secondary {
-  background: transparent;
-  color: #6c757d;
-  border-color: #6c757d;
-  flex: 0 0 auto;
-  min-width: 100px;
-}
+// .btn-primary {
+//   background: #161273;
+//   color: white;
+//   border-color: #161273;
+//   flex: 1;
+// }
 
-.btn-outline-secondary:hover {
-  background: #6c757d;
-  color: white;
-  text-decoration: none;
-}
+// .btn-primary:hover {
+//   background: #161273;
+//   border-color: #161273;
+//   color: white;
+//   text-decoration: none;
+// }
+
+// .btn-secondary {
+//   background: #6c757d;
+//   color: white;
+//   border-color: #6c757d;
+//   flex: 0 0 auto;
+//   min-width: 120px;
+// }
+
+// .btn-secondary:hover {
+//   background: #5a6268;
+//   border-color: #545b62;
+//   color: white;
+//   text-decoration: none;
+// }
 
 /* Responsive mobile */
 @media (max-height: 600px) {
@@ -159,3 +179,16 @@
     min-width: auto;
   }
 }
+// .btn-outline-secondary {
+//   background: transparent;
+//   color: #6c757d;
+//   border-color: #6c757d;
+//   flex: 0 0 auto;
+//   min-width: 100px;
+// }
+
+// .btn-outline-secondary:hover {
+//   background: #6c757d;
+//   color: white;
+//   text-decoration: none;
+// }
