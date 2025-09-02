@@ -12,6 +12,7 @@ export default class extends Controller {
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
       types: "place,locality,neighborhood,address,poi",
+      poi_category: "monument",
       language: 'fr',
       proximity: {
         longitude: 2.3522,
@@ -26,22 +27,18 @@ export default class extends Controller {
     })
     this.geocoder.on("clear", () => this.#clearInputValue())
 
-    // ⚡ Interception des résultats
     this.geocoder.on("results", (e) => {
       if (!e.features) return
 
-      // Exemple scoring simple : priorité aux résultats avec "France"
       const scored = e.features.sort((a, b) => {
         const aScore = this.#scoreFeature(a)
         const bScore = this.#scoreFeature(b)
         return bScore - aScore
       })
 
-      // Remplace les features triées
       e.features = scored
     })
 
-    // Fix bouton geoloc
     this.element.querySelector("button.mapboxgl-ctrl-geocoder--button[aria-label=Geolocate]")?.setAttribute("type", "button")
   }
 
