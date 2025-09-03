@@ -20,7 +20,7 @@ class ItinerariesController < ApplicationController
     @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
     @itineraries = @itinerary_objective.itineraries[1..-1]
     @waypoints = @itineraries.map do |itinerary|
-       sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, itinerary.point_of_interests)
+      sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, itinerary.point_of_interests)
     end
     authorize(@itineraries.first)
   end
@@ -28,7 +28,7 @@ class ItinerariesController < ApplicationController
   def show
     @itinerary = Itinerary.find(params[:id])
     @itinerary_objective = ItineraryObjective.find(params["itinerary_objective_id"])
-    @waypoints = sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)
+    @waypoints = [sort_waypoints(@itinerary_objective.departure_address, @itinerary_objective.arrival_address, @itinerary.point_of_interests)]
     authorize(@itinerary)
   end
 
