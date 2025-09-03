@@ -11,12 +11,9 @@ export default class extends Controller {
       enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
-      types: "place, locality, neighborhood, address, poi",
+      types: "poi,place,locality,neighborhood,address",
       language: 'fr',
-      proximity: {
-        longitude: 2.3522,
-        latitude: 48.8566
-      }
+      proximity: [2.3522, 48.8566]
     })
 
     this.geocoder.addTo(this.element)
