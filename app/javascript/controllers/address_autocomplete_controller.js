@@ -32,8 +32,6 @@ export default class extends Controller {
         const bScore = this.#scoreFeature(b)
         return bScore - aScore
       })
-
-      e.features = scored
     })
 
     this.element.querySelector("button.mapboxgl-ctrl-geocoder--button[aria-label=Geolocate]")?.setAttribute("type", "button")
@@ -65,10 +63,10 @@ export default class extends Controller {
 
   _userLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
+      navigator.geolocation.getCurrentPosition((position) => {
         this.geocoder.setProximity({
-          longitude: 2.333333,
-          latitude: 48.866667
+          longitude: position.coords.longitude,
+          latitude: position.coords.latitude
         })
       })
     }
