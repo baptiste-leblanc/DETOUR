@@ -1,4 +1,26 @@
-.sheetbottom {
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  //background: rgba(255, 255, 255, 0.3);
+  background: rgba(138, 105, 188, 0.324);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  //background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 1rem 1rem 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(188, 141, 196, 0.25);
+  //padding: 1.5rem;
+  //box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  width: 100%;
+  /* Hauteur adaptative selon le contenu */
+  height: auto;
+  min-height: 200px;
+  max-height: 70vh; // Maximum 70 au lieu de 65% de la hauteur d'écran
+  max-width: 100%;
+  /*
   position: fixed;
   bottom: 1rem;
   left: 1rem;
@@ -11,24 +33,27 @@
   // overflow-y: visible;
   border: 1px solid #bc8dc4;
   width: 100%;
-
-  /* Hauteur adaptative selon le contenu */
+  // Hauteur adaptative selon le contenu
   height: auto;
   min-height: 200px;
   max-height: 70vh; // Maximum 70% de la hauteur d'écran
   max-width: 100%;
+  */
 }
 
 /* Header avec icône et titre - alignement uniforme en hauteur */
 .sheet-header {
   display: flex;
-  align-items: center; // Alignement vertical centré
-  margin-bottom: 0.2rem;
-  gap: 12px;
-  min-height: 24px; // Hauteur minimum pour uniformité
+  flex-direction: column;
+  margin-top: 0.5rem;
+  // align-items: center; // Alignement vertical centré
+  margin-bottom: 1rem;
+  // gap: 12px;
+  // min-height: 24px; // Hauteur minimum pour uniformité
 }
 
-/* Icône du flâneur - taille fixe pour alignement */
+/*
+Icône du flâneur - taille fixe pour alignement
 .flaneur-icon {
   width: 24px;
   height: 24px;
@@ -38,7 +63,7 @@
   // Couleur bleue (comme l'ancien cercle)
   filter: brightness(0) saturate(100%) invert(13%) sepia(93%) saturate(7426%) hue-rotate(240deg) brightness(92%) contrast(106%);
 }
-
+*/
 .sheet-title {
   font-size: 18px;
   font-weight: 600;
@@ -47,11 +72,13 @@
   margin: 0; // Supprime les marges par défaut
 }
 
-/* Contenu avec marges uniformes */
+/*
+Contenu avec marges uniformes
 .sheet-content {
   margin-bottom: 0.5rem;
   padding: 0; // Supprime le padding pour utiliser les marges du conteneur
 }
+*/
 
 .sheet-text {
   font-size: 15px;
@@ -60,18 +87,20 @@
   margin-bottom: 0.2rem;
 }
 
+/*
 .sheet-distance {
   font-size: 14px;
   color: #888;
   font-weight: 500;
   margin-top: 8px;
 }
-
+*/
 /* Responsive mobile */
-@media (max-height: 600px) {
+@media (max-height: 768px) {
   .bottom-sheet {
-    max-height: 60vh; // Plus de place sur petits écrans
-    padding: 16px; // Marge uniforme réduite sur petits écrans
+    padding: 1rem;
+    max-height: 70vh; // Plus de place sur petits écrans
+    //padding: 16px; // Marge uniforme réduite sur petits écrans
   }
 
   .sheet-title {
@@ -88,6 +117,7 @@
   }
 }
 
+/*
 @media (max-width: 30px) {
   .bottom-sheet {
     padding: 16px; // Marge uniforme sur très petits écrans
@@ -102,4 +132,4 @@
   .btn-outline-secondary {
     min-width: auto;
   }
-}
+*/

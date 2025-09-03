@@ -1,7 +1,7 @@
 <div class="position-relative col-12 col-sm-4 z-2 glass-card-background pe-4" style="height: -webkit-fill-available; padding: 1em 0px;">
-  <div class="py-5">
-    <div class="liquid-glass p-3 fixed-bottom col-12 col-sm-4 m-2">
-
+<!--  <div class="py-5"> -->
+<!--    <div class="liquid-glass p-3 fixed-bottom col-12 col-sm-4 m-2"> -->
+    <div class="liquid-glass bottom-sheet z-2">
       <!-- Header avec icône et titre -->
       <div class="sheet-header">
         <h2 class="sheet-title text-light">
@@ -47,7 +47,9 @@
       </div>
 
     </div>
-  </div>
+<!--  </div> -->
 </div>
 
-<%= render "shared/map", waypoints: @waypoints %>
+<div class="map-itinerary-container">
+  <%= render "shared/map", waypoints: @waypoints %>
+</div>
