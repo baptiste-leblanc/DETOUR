@@ -24,54 +24,7 @@ body {
   background: rgb(255, 255, 255);
 }
 
-#map::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(79, 79, 79, 0.1);
-  pointer-events: none;
-  z-index: 1;
-}
 
-// .mapboxgl-popup.my-glass-popup {
-//   background:transparent;
-
-//   .mapboxgl-popup-content {
-//     background:transparent;
-//     padding: 1rem;
-//     font-size: 16px;
-//   }
-
-//   .mapboxgl-popup-tip {
-//     border-top-color: rgba(255, 255, 255, 0.3);
-//   }
-// }
-
-// .mapboxgl-popup .mapboxgl-popup-anchor-bottom {
-//   background: rgba(255, 255, 255, 0.3);
-//   backdrop-filter: blur(20px) saturate(180%);
-//   -webkit-backdrop-filter: blur(20px) saturate(180%);
-//   border-radius: 1rem;
-//   border: 1px solid rgba(255, 255, 255, 0.25);
-//   box-shadow: 0 8px 32px rgba(188, 141, 196, 0.25);
-//   overflow-y: visible;
-//   border: 1px solid #bc8dc4;
-// }
-
-
-// // Bouton close ==>
-// .mapboxgl-popup-close-button {
-//   margin-top: 10px;
-
-//   span {
-//     font-size: 30px;
-//   }
-// }
-
-/* === Popup style glassmorphism premium === */
 .mapboxgl-popup.glass-popup {
   background: transparent
 }
@@ -91,6 +44,7 @@ body {
 
 .mapboxgl-popup.glass-popup p {
   font-size: 9px;
+  font-weight:100;
   margin: 0 0 1rem 0;
   color: #2a2356;
 }
@@ -106,4 +60,11 @@ body {
 
 .mapboxgl-popup-tip {
   display:none
+}
+
+.mapboxgl-ctrl-geocoder .suggestions {
+  position: absolute;
+  bottom: 100% !important;
+  top: auto !important;
+  margin-bottom: 5px;
 }
