@@ -82,12 +82,49 @@ export default class extends Controller {
             const marker = new mapboxgl.Marker({ color: '#161273' })
               .setLngLat(waypoint.location)
               .addTo(this.map);
-
-            const popup = new mapboxgl.Popup({ offset: 25, closeOnClick: true, closeButton: true })
+            let categoryEmoji;
+              switch(waypoint.category) {
+                case 'Historical Sites':
+                  categoryEmoji = '🌍';
+                  break;
+                case 'Culture & Arts':
+                  categoryEmoji = '🎭';
+                  break;
+                case 'Museums & Exhibitions':
+                  categoryEmoji = '🖼️';
+                  break;
+                case 'Religious':
+                  categoryEmoji = '⛪';
+                  break;
+                case 'Cafés & Bistros':
+                  categoryEmoji = '☕';
+                  break;
+                case 'Restaurants':
+                  categoryEmoji = '🍽️';
+                  break;
+                case 'Desserts & Pastry Shops':
+                  categoryEmoji = '🍰';
+                  break;
+                case 'Food Markets & Street Food':
+                  categoryEmoji = '🛒';
+                  break;
+                case 'Shopping & Leisure':
+                  categoryEmoji = '🛍️';
+                  break;
+                case 'Nature & Parks':
+                  categoryEmoji = '🌳';
+                  break;
+                case 'Knowledge & Institutions':
+                  categoryEmoji = '📚';
+                  break;
+                default:
+                  categoryEmoji = '📍';
+              }
+            const popup = new mapboxgl.Popup({ className: 'glass-popup', offset: 25, closeOnClick: true, closeButton: true })
               .setHTML(`
-                <div class="liquid-glass liquid-blob p-3">
-                  <h5 style="margin: 0 0 5px 0;">${waypoint.name || 'Point d\'intérêt'}</h5>
-                  <p style="margin: 0;font-size:16px;">${waypoint.description || ''}</p>
+                <div class="m-2" style="background:transparent">
+                  <h5 style="margin: 0 0 10px 0;">${categoryEmoji} ${waypoint.name }</h5>
+                  <p style="margin: 0;font-size:16px;margin-left:5px;">${waypoint.description || ''}</p>
                 </div>
               `);
 
