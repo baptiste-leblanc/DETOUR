@@ -11,10 +11,7 @@ export default class extends Controller {
       enableGeolocation: this.addressTarget.dataset.enableGeolocation === "true",
       placeholder: this.addressTarget.placeholder || "Search",
       accessToken: this.apiKeyValue,
-      types: "place,locality,neighborhood,address,poi",
-      language: 'fr',
-      countries: "fr",
-      poi_category: "monument",
+      types: "place, locality, neighborhood, address, poi",
       language: 'fr',
       proximity: {
         longitude: 2.3522,

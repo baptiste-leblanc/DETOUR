@@ -1,1 +1,1 @@
-console.log('Hello from the service worker!')
+// console.log('Hello from the service worker!')

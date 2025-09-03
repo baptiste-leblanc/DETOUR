@@ -3,7 +3,7 @@
 <div class="py-5" style="margin-right: 1.5em">
   <div class="liquid-glass p-3">
 
- <%= simple_form_for @itinerary_objective do |f| %>
+  <%= simple_form_for @itinerary_objective do |f| %>
     <%= f.simple_fields_for :departure_address, Address.new do |g| %>
       <%= g.input :full_address,
       input_html: {
@@ -83,6 +83,9 @@
       </div>
     </label>
   </div>
+  <div class="d-flex justify-content-end w-100">
+        <%= f.submit "GO", class: "go btn btn btn-success rounded-4 mt-3" %>
+  </div>
 </div>
 
     <%# <div id="ctas" class="row d-none" data-form-visibility-target="detourCtas">
@@ -131,9 +134,7 @@
         </div> %>
 
 
-      <div class="d-flex justify-content-end w-100">
-        <%= f.submit "GO", class: "go btn btn btn-success rounded-4 mt-3" %>
-      </div>
+
     <% end %>
   </div>
 </div>
