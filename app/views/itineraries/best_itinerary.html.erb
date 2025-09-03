@@ -1,50 +1,50 @@
-<div class="position-relative col-12 col-sm-4 z-2 glass-card-background pe-4" style="height: -webkit-fill-available; padding: 1em 0px;">
-  <div class="py-5">
-    <div class="liquid-glass p-3 fixed-bottom col-12 col-sm-4 m-2">
-        <!-- Header avec icône et titre -->
-    <div class="sheet-header">
-      <h2 class="sheet-title text-light">
-        🚶🏻‍➡️Your itinerary: ⏱ ⏳ <span class="duration"></span> → <span class="distance"></span>
-      </h2>
-    </div>
-      <!-- Contenu -->
-    <div>
-      <p class="sheet-text p-1 ps-3 text-light">
-        <%= @itinerary.description %>
-      </p>
-    </div>
+<!-- Carrousel à la place du Bottom Sheet -->
+<div class="liquid-glass alternatives-carousel z-2">
+  <!-- Header du carrousel -->
+  <div class="card-header">
+    <h2 class="sheet-header">🚶🏻‍➡️<%= @itinerary.theme.capitalize %></h2><br>
+    <p>⏱ ⏳ <span class="duration"></span> → <span class="distance"></span></p>
+  </div>
 
-        <!-- Point de départ / Point d'arrivée -->
-    <div class="ps-3 mt-1 mb-2">
-      <%= render "shared/address", itinerary_objective: @itinerary_objective %>
-    </div>
+  <!-- Rappel Point de départ / Point d'arrivée ps-3 mt-1 mb-2 -->
+  <div class="sheet-rappel">
+    <%= render "shared/address", itinerary_objective: @itinerary_objective %>
+  </div>
 
-      <!-- Points d'intérêt du parcours -->
-        <div class="pois-list mt-2 mb-1 ps-3">
-          <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
-            <div class="poi-preview-item">
-              <span class="poi-number"><%= poi_index + 1 %></span>
-              <div class="poi-info">
-                <span class="poi-name"><%= poi.name %></span>
-                <span class="poi-description"><%= poi.description %></span>
-              </div>
-            </div>
-          <% end %>
-        </div>
+  <!-- Description -->
+  <div>
+    <p class="sheet-description">
+      <%= @itinerary.description %>
+    </p>
+  </div>
 
-
-    <!-- Boutons -->
-      <div class="button-container">
-        <div class="pt-1 mb-1">
-          <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-success mb-2"%>
-        </div>
-        <div class="d-flex gap-1">
-          <%= link_to "New itinerary", root_path, class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
-          <%= link_to "See alternatives", alternative_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
+  <!-- Points d'intérêt du parcours -->
+  <!-- <div class="pois-list mt-2 mb-1 ps-3"> -->
+    <div class="pois-list">
+    <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
+      <div class="poi-preview-item">
+        <span class="poi-number"><%= poi_index + 1 %></span>
+        <div class="poi-info">
+          <span class="poi-name"><%= poi.name %></span>
+          <span class="poi-description"><%= poi.description %></span>
         </div>
       </div>
+    <% end %>
+  </div>
+
+  <!-- Bouton de retour -->
+  <div class="button-container">
+    <div class="pt-1 mb-1">
+      <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-success mb-2"%>
+    </div>
+    <div class="d-flex gap-1">
+      <%= link_to "👈​👈🏻 New itinerary", root_path, class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
+      <%= link_to "See alternatives", alternative_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
     </div>
   </div>
-</div>
 
-<%= render "shared/map", waypoints: @waypoints %>
+</div>
+<!-- Carte en arrière-plan (identique à best_itinerary) -->
+<div class="map-itinerary-container">
+  <%= render "shared/map", waypoints: @waypoints %>
+</div>
