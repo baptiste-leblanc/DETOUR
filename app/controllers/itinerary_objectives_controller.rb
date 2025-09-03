@@ -370,10 +370,10 @@ end
   target_duration = duration_objective + itinerary_duration(departure, arrival)
   current_duration = total_duration(departure, arrival, poi_coord)
 
-  return poi_coord if current_duration <= target_duration
+  return poi_coord if current_duration - target_duration <= 1
 
   # Tant que trop long
-  while current_duration - target_duration > 5 && poi_coord.any?
+  while current_duration - target_duration > 1 && poi_coord.any?
     # Supprime le POI qui augmente le moins la durée totale (ou random si tu veux)
     poi_to_remove = poi_coord.min_by do |poi|
       total_duration(departure, arrival, poi_coord - [poi])
