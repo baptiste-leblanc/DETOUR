@@ -224,7 +224,7 @@ end
             - name (string)
             - address (string)
             - description (string, one sentence, 20–30 words, selling why it is enjoyable)
-            - category (string)
+            - category (string): one of the following: "Historical Sites", "Culture & Arts", "Museums & Exhibitions", "Religious", "Cafés & Bistros", "Restaurants", "Street Food & Poestry Shop", "Shopping & Leisure", "Nature & Parks", "Knowledge & Institutions"
       Rules:
       - Exactly 4 themes (no more, no less)
       - Each theme must contain 7–10 POIs (POIs can appear in multiple themes)
@@ -289,6 +289,7 @@ end
     point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
   end
 
+  
   # Retire les POIs en dehors de la zone
   pois_collections = JSON.parse(response.content)["POIs_collection"]
   pois_collections.each do |collection|
