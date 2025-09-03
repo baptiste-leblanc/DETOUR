@@ -14,7 +14,7 @@
         placeholder: "Departure address",
         class:"d-none"},
       wrapper_html: {
-        class: "position-relative z-3",
+        class: "position-relative z-2",
         data: {
           controller: "address-autocomplete",
           address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"],
@@ -30,7 +30,7 @@
           placeholder: "Arrival address",
           class:"d-none"},
         wrapper_html: {
-          class: "position-relative z-2 d-none",
+          class: "position-relative z-3 d-none",
           data: {
             controller: "address-autocomplete",
             address_autocomplete_api_key_value: ENV["MAPBOX_API_KEY"],
@@ -44,7 +44,7 @@
   <div class="mb-2">
     <%= f.radio_button :duration_objective, "0", id: "option1" %>
     <label for="option1" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
-      <span class="main-text direct me-1">Direct</span>
+      <span class="main-text direct me-2">Direct</span>
       <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757591/arrow-right-from-line-light-full_h7hbpb.svg" alt="icone direct" style="width: 20px">
     </label>
   </div>
@@ -52,10 +52,10 @@
   <div class="mb-2">
     <%= f.radio_button :duration_objective, "10", id: "option2" %>
     <label for="option2" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
-      <span class="main-text max-10 me-1">Short Detour</span>
+      <span class="main-text max-10 me-2">Short Detour</span>
       <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757082/wave-sine-light-full_gf3bnl.svg" alt="" style="width: 20px">
     <div>
-      <span class="sub-text ms-1">max 10 minutes</span>
+      <span class="sub-text ms-2">max 10 minutes</span>
     </div>
     </label>
   </div>
@@ -63,7 +63,7 @@
   <div class="mb-2">
     <%= f.radio_button :duration_objective, "20", id: "option3" %>
     <label for="option3" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)">
-        <span class="main-text max-20 me-1">Long Detour</span>
+        <span class="main-text max-20 me-2">Long Detour</span>
         <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756757082/wave-square-light-full_en7p0i.svg" alt="" style="width: 20px">
         <span class="sub-text ms-1">max 20 minutes</span>
     </label>
