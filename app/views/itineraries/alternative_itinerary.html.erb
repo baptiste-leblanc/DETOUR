@@ -1,21 +1,12 @@
 <!-- Carrousel à la place du Bottom Sheet -->
-<div class="alternatives-carousel z-2">
+<div class="liquid-glass alternatives-carousel z-2">
   <!-- Header du carrousel -->
   <div class="carousel-header">
     <h2 class="carousel-title">Alternatives</h2>
     <p class="carousel-subtitle">Swipe to explore different themed itineraries</p>
   </div>
   <!-- Carrousel Bootstrap -->
-  <div id="alternativesCarousel" class="carousel slide" data-bs-interval="false" data-controller="carousel">
-
-    <!-- Indicateurs -->
-    <div class="carousel-indicators custom-indicators">
-      <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
-        <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
-                class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
-        </button>
-      <% end %>
-    </div>
+  <div id="alternativesCarousel" class="carousel slide " data-bs-interval="false" data-controller="carousel">
 
     <!-- Contenu du carrousel -->
     <div class="carousel-inner">
@@ -26,9 +17,8 @@
             <!-- En-tête de la card -->
 
             <div class="card-header">
-              <h3 class="itinerary-theme">
-                🗺️<%= itinerary.theme.capitalize %> ⏱ <span class="duration"></span> - 🛣️ <span class="distance"></span>
-              </h3>
+              <h3 class="itinerary-theme">🗺️<%= itinerary.theme.capitalize %></h3>
+              <p>⏱ <span class="duration"></span> - 🛣️ <span class="distance"></span></p>
             </div>
 
             <!-- Description -->
@@ -37,7 +27,6 @@
 
               <!-- POIs preview (les 3 premiers) -->
               <div class="pois-preview">
-                <h6>Highlights:</h6>
                 <div class="pois-list">
                   <% itinerary.point_of_interests.limit(3).each_with_index do |poi, poi_index| %>
                     <div class="poi-preview-item">
@@ -51,7 +40,7 @@
 
                   <% if itinerary.point_of_interests.count > 3 %>
                     <div class="more-pois">
-                      +<%= itinerary.point_of_interests.count - 3 %> more outstanding stops 😎​
+                      +<%= itinerary.point_of_interests.count - 3 %> more outstanding stops 🤩
                     </div>
                   <% end %>
                 </div>
@@ -62,10 +51,19 @@
             <div class="card-actions">
               <%= link_to "Choose this alternative",
                   itinerary_objective_itinerary_path(@itinerary_objective, itinerary),
-                  class: "btn btn-primary rounded-4 flex-fill" %>
+                  class: "go btn w-100 mb-2" %>
             </div>
           </div>
         </div>
+      <% end %>
+    </div>
+
+    <!-- Indicateurs -->
+    <div class="carousel-indicators custom-indicators">
+      <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
+        <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
+                class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
+        </button>
       <% end %>
     </div>
 
@@ -85,7 +83,7 @@
   <div class="back-button-container">
     <%= link_to "← To the initial itinerary",
         best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
-        class: "btn btn-outline-light btn-sm" %>
+        class: "btn btn-outline-dark btn-sm" %>
   </div>
 
 </div>
