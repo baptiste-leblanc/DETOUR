@@ -13,7 +13,8 @@ export default class extends Controller {
       accessToken: this.apiKeyValue,
       types: "poi,place,locality,neighborhood,address",
       language: 'fr',
-      proximity: [2.3522, 48.8566]
+      proximity: [2.3522, 48.8566],
+      limit: 3
     })
 
     this.geocoder.addTo(this.element)
