@@ -1,7 +1,7 @@
 /* Option 2: Hauteur flexible (prend l'espace disponible) */
 .pois-list {
   height: fit-content;
-  max-height: 170px;
+  max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
   border: 1px solid #e0e0e0;

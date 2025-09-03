@@ -14,6 +14,7 @@
   //padding: 1.5rem;
   //box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+
   width: 100%;
   /* Hauteur adaptative selon le contenu */
   height: auto;
@@ -43,33 +44,12 @@
 
 /* Header avec icône et titre - alignement uniforme en hauteur */
 .sheet-header {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0.5rem;
-  // align-items: center; // Alignement vertical centré
-  margin-bottom: 1rem;
-  // gap: 12px;
-  // min-height: 24px; // Hauteur minimum pour uniformité
-}
-
-/*
-Icône du flâneur - taille fixe pour alignement
-.flaneur-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-
-  // Couleur bleue (comme l'ancien cercle)
-  filter: brightness(0) saturate(100%) invert(13%) sepia(93%) saturate(7426%) hue-rotate(240deg) brightness(92%) contrast(106%);
-}
-*/
-.sheet-title {
-  font-size: 18px;
+  font-size: 1.3rem;
   font-weight: 600;
+  margin: 0;
   color: #1a1a1a;
-  line-height: 24px; // Ligne fixe pour alignement avec l'icône
-  margin: 0; // Supprime les marges par défaut
+  // line-height: 24px;
+  min-height: 24px; // Hauteur minimum pour uniformité
 }
 
 /*
@@ -80,11 +60,18 @@ Contenu avec marges uniformes
 }
 */
 
-.sheet-text {
+.sheet-rappel {
   font-size: 15px;
   color: #666;
   line-height: 1.4;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.sheet-description {
+  font-size: 15px;
+  color: black;
+  line-height: 1.4;
+  margin-bottom: 1rem;
 }
 
 /*
