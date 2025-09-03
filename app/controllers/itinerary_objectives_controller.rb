@@ -26,6 +26,8 @@ def create
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
         poi_coord = []
         poi_collection["points_of_interest"].each do |poi|
+          poi_record = PointOfInterest.find_by_name(poi)
+          next unless poi_record
           poi_coord << Address.find(PointOfInterest.find_by_name(poi).address_id)
         end
         filtered_pois = pois_adjust(departure, arrival, poi_coord, duration_objective)
@@ -36,11 +38,19 @@ def create
       end
     else
       # situation 2: on en a moins donc on va en générer
+        # On génère 4 collections d'itinéraraires avec 20 POIs distincts dont certains déjà en DB et d'autres créés
       filtered_pois_collection = generate_POIs(area_for_POIs, pois_in_db)
+          # On filtre
       filtered_pois_collection.each do |poi_collection|
         poi_coord = []
         poi_collection["poi_names"].each do |poi_name|
-          poi_coord << Address.find(PointOfInterest.find_by_name(poi_name).address_id)
+          puts "POIs traités : #{poi_collection['poi_names']}"
+          poi = PointOfInterest.find_by(name: poi_name)
+          if poi
+            poi_coord << Address.find(poi.address_id)
+          else
+            puts "⚠️ POI introuvable : #{poi_name}"
+          end
         end
 
         itinerary = Itinerary.create(theme: poi_collection["theme_name"], description: poi_collection["theme_description"], itinerary_objective_id: @itinerary_objective.id)
@@ -109,7 +119,7 @@ end
   end
 
   # Génère un quadrilatère GeoJSON autour du segment départ-arrivée
-  def corridor_polygon(start_lat, start_lon, end_lat, end_lon, half_width_m = 500)
+  def corridor_polygon(start_lat, start_lon, end_lat, end_lon, half_width_m = 200)
     brg = bearing(start_lat, start_lon, end_lat, end_lon)
 
     left_brg  = (brg - 90) % 360
@@ -224,18 +234,18 @@ end
             - name (string)
             - address (string)
             - description (string, one sentence, 20–30 words, selling why it is enjoyable)
-            - category (string)
+            - category (string): one of the following: "Historical Sites", "Culture & Arts", "Museums & Exhibitions", "Religious", "Cafés & Bistros", "Restaurants", "Street Food & Poestry Shop", "Shopping & Leisure", "Nature & Parks", "Knowledge & Institutions"
       Rules:
       - Exactly 4 themes (no more, no less)
       - Each theme must contain 7–10 POIs (POIs can appear in multiple themes)
       - Do not include any keys, metadata, or fields outside of what is specified
   PROMPT
-  pois_in_db = pois_in_db.map do |poi|
+  pois_in_db_names = pois_in_db.map do |poi|
     poi = PointOfInterest.find_by_address_id(poi.id)["name"]
   end
   prompt = <<~PROMPT
-      Existing list of POIs : #{pois_in_db}
-      Number of extra POIs to generate : #{20 - pois_in_db.count}
+      Existing list of POIs : #{pois_in_db_names}
+      Number of extra POIs to generate : #{20 - pois_in_db_names.count}
       Search area for extra POIs to generate : #{area_for_POIs}
       PROMPT
   response = chat.with_instructions(system_prompt).ask(prompt)
@@ -260,14 +270,14 @@ end
       }end
     end).value!
 
-    pois_new_with_location = pois_new.each do |poi|
-      pois_new_address_coordinates.each do |poi_location|
-        poi["location"] = {
+    pois_new_with_location = pois_new.each_with_index.map do |poi, index|
+      poi_location = pois_new_address_coordinates[index]
+      poi["location"] = {
           "full_address" => poi_location["location"]["full_address"],
           "latitude" => poi_location["location"]["latitude"],
           "longitude" => poi_location["location"]["longitude"]
-        }
-      end
+      }
+      poi
     end
   polygon = area_for_POIs[:geometry][:coordinates].flatten(1)
   pois_inside  = []
@@ -285,14 +295,31 @@ end
 
   # Crée les addresses et points d'intérêt en db pour les nouveaux POIs
   pois_inside.each do |poi|
-    address = Address.create(full_address: poi["location"]["full_address"], latitude: poi["location"]["latitude"], longitude: poi["location"]["longitude"], address_type: "poi")
-    point_of_interest = PointOfInterest.create(name: poi["name"], description: poi["description"], category: poi["category"], address: address)
+    address = Address.find_or_create_by(
+      full_address: poi["location"]["full_address"]
+    ) do |a|
+      a.latitude = poi["location"]["latitude"]
+      a.longitude = poi["location"]["longitude"]
+      a.address_type = "poi"
+    end
+
+    PointOfInterest.find_or_create_by(
+      name: poi["name"],
+      address: address
+    ) do |poi_record|
+      poi_record.description = poi["description"]
+      poi_record.category = poi["category"]
+    end
   end
+
 
   # Retire les POIs en dehors de la zone
   pois_collections = JSON.parse(response.content)["POIs_collection"]
+
+  pois_outside_names = pois_outside.map { |poi| poi["name"] }
+
   pois_collections.each do |collection|
-    collection["poi_names"].reject! { |poi_name| pois_outside.include?(poi_name) }
+    collection["poi_names"].reject! { |poi_name| pois_outside_names.include?(poi_name) }
   end
   end
   # END: Code permettant de générer les points d'intérêts dans la zone
@@ -326,7 +353,7 @@ end
     response = Net::HTTP.get(URI(url))
     data = JSON.parse(response)
 
-    (data["routes"][0]["duration"] / 60.0).round
+    (data["routes"][0]["duration"] / 60.0)
   end
 
   def itinerary_duration(departure, arrival)
@@ -336,19 +363,25 @@ end
     url = "#{base_url}#{coords}?alternatives=false&geometries=geojson&overview=full&steps=false&access_token=#{api_key}"
     response = Net::HTTP.get(URI(url))
     data = JSON.parse(response)
-    (data["routes"][0]["duration"] / 60.0).round
+    (data["routes"][0]["duration"] / 60.0)
   end
 
-  def pois_adjust(departure, arrival, poi_collection, duration_objective)
-    total_duration = total_duration(departure, arrival, poi_collection)
-    direct_duration = itinerary_duration(departure, arrival)
-    target_duration = duration_objective + direct_duration
+  def pois_adjust(departure, arrival, poi_coord, duration_objective)
+  target_duration = duration_objective + itinerary_duration(departure, arrival)
+  current_duration = total_duration(departure, arrival, poi_coord)
 
-    while total_duration > target_duration
-      poi_collection.pop
-      total_duration = total_duration(departure, arrival, poi_collection)
+  return poi_coord if current_duration - target_duration <= 1
 
+  # Tant que trop long
+  while current_duration - target_duration > 1 && poi_coord.any?
+    # Supprime le POI qui augmente le moins la durée totale (ou random si tu veux)
+    poi_to_remove = poi_coord.min_by do |poi|
+      total_duration(departure, arrival, poi_coord - [poi])
     end
-    return poi_collection
+    poi_coord.delete(poi_to_remove)
+    current_duration = total_duration(departure, arrival, poi_coord)
+  end
+
+  poi_coord
   end
 end
