@@ -81,13 +81,13 @@
 
   <!-- Bouton de retour -->
   <div class="back-button-container">
-    <%= link_to "← To the initial itinerary",
+    <%= link_to "👈​👈🏻​ To the initial itinerary",
         best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
         class: "btn btn-outline-dark btn-sm" %>
   </div>
 
 </div>
 <!-- Carte en arrière-plan (identique à best_itinerary) -->
-<div class="alternative-itinerary-container">
+<div class="map-itinerary-container">
   <%= render "shared/map", waypoints: @waypoints %>
 </div>
