@@ -202,8 +202,10 @@ export default class extends Controller {
   }
 
   fitMapBounds(geometry) {
+    const bottomSheet = document.querySelector(".liquid-glass")
+
     const bounds = new mapboxgl.LngLatBounds();
     geometry.coordinates.forEach(coordinate => bounds.extend(coordinate));
-    this.map.fitBounds(bounds, { padding: 120 });
+    this.map.fitBounds(bounds, { padding: { top:50, right: 50, left: 50, bottom: bottomSheet.clientHeight + 20 } });
   }
 }
