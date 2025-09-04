@@ -8,7 +8,7 @@
 
  <!-- Header du carrousel -->
   <div class="carousel-header">
-    <h2 class="carousel-title">Best Itinerary</h2>
+    <h2 class="carousel-title">BEST ITINERARY</h2>
   </div>
 
     <div class="bg-white rounded-4 px-3 pt-3 pb-1">
@@ -28,7 +28,7 @@
       <p class="sheet-description mt-1">
         <%= @itinerary.description %>
       </p>
-          <div class="pois-list-scrollable">
+      <div class="pois-list-scrollable">
 
 
       <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
@@ -40,11 +40,11 @@
           </div>
         </div>
       <% end %>
-    </div>
+      </div>
 
     </div>
-          <div class="mt-2 mb-2">
-        <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-light rounded-4"%>
+      <div class="d-flex justify-content-end mt-2 mb-2">
+        <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn rounded-4 mt-2"%>
       </div>
     </div>
 

@@ -1,4 +1,5 @@
 .go {
+  display: flex;
   color: #ffffff;
   width: 100%;
   height: 50px;
@@ -6,7 +7,8 @@
   background-color: #1E2A78;
   font-weight: 600;
   font-size: 18px;
-  text-align:center
+  align-items: center;
+  justify-content: center;
 }
 
 .go:hover {
