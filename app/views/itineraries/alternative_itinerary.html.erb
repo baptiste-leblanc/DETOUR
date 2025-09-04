@@ -10,9 +10,9 @@
   <div class="carousel-header">
     <!-- Bouton de retour -->
     <div class="back-button-container">
-      <%= link_to "👈🏻​  Back",
+      <%= link_to "← Back",
           best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
-          class: "btn btn-light btn-sm back-btn" %>
+          class: "btn btn-light btn-sm back-btn px-2" %>
     </div>
     <h2 class="carousel-title">Alternatives</h2>
     <!-- pour équilibrer le title avec le CTA -->
@@ -31,8 +31,7 @@
             <!-- En-tête de la card -->
             <div class="card-header">
 
-              <!-- <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.capitalize %></h3> -->
-              <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.split.map(&:capitalize).join(" ") %></h3>
+              <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.titleize %></h3>
               <p class="duradist">⏳ <span class="duration"></span> ⬆️​ <span class="distance"></span></p>
 
             </div>
@@ -96,6 +95,6 @@
       </button>
       -->
     </div>
-  </div> -->
+  </div>
 
 </div>

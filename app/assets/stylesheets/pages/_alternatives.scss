@@ -36,10 +36,13 @@
   flex-shrink: 0;
 }
 */
+.back-button-container {
+  margin-left: -11px
+}
 
 .back-button-container,
   .spacer {
-    flex: 1;  // équilibre l’espace autour du titre
+    
   }
 
 
