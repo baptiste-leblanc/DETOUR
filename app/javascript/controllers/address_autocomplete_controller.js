@@ -13,17 +13,9 @@ export default class extends Controller {
       accessToken: this.apiKeyValue,
       types: "poi,place,locality,neighborhood,address",
       language: 'fr',
+      proximity: [2.3522, 48.8566],
       limit: 3
     })
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.geocoder.setProximity({
-          longitude: position.coords.longitude,
-          latitude: position.coords.latitude
-        });
-      });
-    }
 
     this.geocoder.addTo(this.element)
     this.geocoder.on("result", event => {
