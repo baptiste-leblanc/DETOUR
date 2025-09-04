@@ -26,17 +26,6 @@
   //color: #667eea;
 }
 
-/*
-.back-button-container {
-  flex-shrink: 0;
-}
-
-.spacer {
-  width: 60px; //Même largeur approximative que le bouton Back
-  flex-shrink: 0;
-}
-*/
-
 .back-button-container,
   .spacer {
     flex: 1;  // équilibre l’espace autour du titre
@@ -162,6 +151,7 @@
 
 // Liste scrollable des POIs
 .pois-list-scrollable {
+  border: solid 1px #e5e5e5;
   display: flex;
   flex-direction: column;
   // Hauteur pour afficher exactement 2.5 POIs (basé sur la hauteur d'un POI ~50px)
