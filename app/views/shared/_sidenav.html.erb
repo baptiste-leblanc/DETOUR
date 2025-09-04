@@ -1,14 +1,8 @@
-
-  <ul class="position-sticky sticky-top nav flex-column">
+<ul class="position-sticky sticky-top nav flex-column" style="padding-top: 60px">
+  <% itineraries.each do |itinerary| %>
     <li class="nav-item">
-      <%= link_to "#", class: "nav-link text-dark ps-0", data: { action: "click->toggle#call" } do %>
-        <i class="fa-solid fa-bars"></i>
-      <% end %>
+      <p><%= itinerary.theme %></p>
     </li>
-    <% itineraries.each do |itinerary| %>
-      <li class="nav-item">
-        <p><%= itinerary.theme %></p>
-      </li>
-    <% end %>
-  </ul>
+  <% end %>
+</ul>
 <div class="black-wall"></div>

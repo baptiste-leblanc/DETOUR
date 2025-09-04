@@ -1,16 +1,78 @@
-.navbar-lewagon {
-  justify-content: space-between;
+/* Animated hamburger menu styles */
+.nav-toggle {
+  margin-top: 10px;
   background: white;
+  border: 1px solid #c5c3c3;
+  border-radius: 4px;
+  cursor: pointer;
+  // display: inline-block;
+  // padding: 0.5rem;
+  user-select: none;
+  position: relative;
+  z-index: 4;
+  width: 29px;
+  height: 29px;
 }
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
+.nav-toggle:focus {
+  outline: none;
 }
 
-.navbar-lewagon .navbar-brand img {
-  width: 40px;
+.nav-toggle:hover .lines,
+.nav-toggle:hover .lines:before,
+.nav-toggle:hover .lines:after {
+  background: #33b6e4;
 }
 
-.container-fluid button {
-  border:0px
+.lines {
+  background: #33b6e4;
+  border-radius: 2px;
+  display: inline-block;
+  height: 2px;
+  width: 20px;
+  position: relative;
+  transition: background 0.3s ease;
+  top: -4px;
+  left: -2px;
+}
+
+.lines:after,
+.lines:before {
+  background: #33b6e4;
+  border-radius: 2px;
+  content: "";
+  display: inline-block;
+  height: 2px;
+  width: 20px;
+  left: 0;
+  position: absolute;
+  transform-origin: 50% 50% 0;
+  transition: top 0.3s 0.4s ease, transform 0.3s ease;
+}
+
+.lines:after {
+  top: 6px;
+}
+
+.lines:before {
+  top: -6px;
+}
+
+/* Active state when navigation is visible */
+.nav-visible .nav-toggle .lines {
+  background: transparent;
+}
+
+.nav-visible .nav-toggle .lines:after,
+.nav-visible .nav-toggle .lines:before {
+  top: 0;
+  transition: top 0.3s ease, transform 0.3s 0.3s ease;
+}
+
+.nav-visible .nav-toggle .lines:after {
+  transform: rotate3d(0, 0, 1, 45deg);
+}
+
+.nav-visible .nav-toggle .lines:before {
+  transform: rotate3d(0, 0, 1, -45deg);
 }
