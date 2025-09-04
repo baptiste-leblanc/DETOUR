@@ -9,187 +9,304 @@
   /* Hauteur adaptative selon le contenu */
   height: auto;
   min-height: 200px;
-  max-height: 70vh; // Maximum 70 au lieu de 65% de la hauteur d'écran
+  // max-height: 70vh; // Maximum 70 au lieu de 65% de la hauteur d'écran
   max-width: 100%;
 }
 
+//.carousel-header-aligned
 .carousel-header {
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  //margin-bottom: 0.5rem;
+  padding: 0.5rem 1rem;
+  position: relative;
   margin-bottom: 0.5rem;
-  color: #667eea;
+  //color: #667eea;
 }
 
+/*
+.back-button-container {
+  flex-shrink: 0;
+}
+
+.spacer {
+  width: 60px; //Même largeur approximative que le bouton Back
+  flex-shrink: 0;
+}
+*/
+
+.back-button-container,
+  .spacer {
+    flex: 1;  // équilibre l’espace autour du titre
+  }
+
+
 .carousel-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  //margin: 0;
+  flex: 2; //1
   text-align: center;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  //font-weight: 600;
+  //margin: 0;
   //color: #764ba2;
-  color: #1a1a1a;
-  line-height: 24px
+  color: #ffffff;
+}
+
+.back-btn {
+    height: 2.2rem;   // ajuste à la même hauteur que le titre
+    display: flex;
+    align-items: center;
 }
 
 .carousel-subtitle {
   font-size: 0.9rem;
   opacity: 0.9;
-  margin: 0.25rem 0 0 0;
+  //margin: 0.25rem 0 0 0;
   text-align: center;
   color: #ffffff;
-  opacity: 0.9;
+  margin-top: 0.2rem;
+}
+
+/* Zone des indicateurs compacte */
+.indicators-zone {
+  display: flex;
+  justify-content: center;
+  //padding: 0.5rem 0 0.8rem 0; /* Padding réduit */
+  padding: 0.5rem 0 0 0; /* Padding réduit */
 }
 
 /* Indicateurs personnalisés */
-  .custom-indicators {
-    position: relative;
-    margin-right: 0%;
-    margin-bottom: 0%;
-    margin-left: 0%;
+.custom-indicators {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+/*  margin-right: 0%;
+  margin-bottom: 0%;
+  margin-left: 0%; */
+}
+
+.indicators-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px; /* Espacement entre les indicateurs */
+  //margin-bottom: 0.3rem;
+}
+
+.custom-indicators button {
+  width: 35px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.custom-indicators button.active {
+  //background-color: #764ba2;
+  background-color: #ffffff;
+  transform: scale(1.1);
+}
+
+/* Cards d'itinéraires */
+.itinerary-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: auto;
+}
+
+.card-header {
+//  margin-bottom: 0.05rem;
+}
+
+.duradist {
+  margin-bottom: 4px;
+}
+
+.itinerary-theme {
+  font-size: 1.1rem;
+  font-weight: 600;
+  //color: #2c3e50;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+  //line-height: 24px;
+}
+
+.card-content {
+  margin-bottom: 1.5rem;
+  // max-height: 200px;
+  // Hauteur fixe pour harmoniser toutes les cards
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+.itinerary-description {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.pois-preview {
+  flex: 1; // Prend l'espace restant
+  display: flex;
+  flex-direction: column;
+}
+
+// Liste scrollable des POIs
+.pois-list-scrollable {
+  display: flex;
+  flex-direction: column;
+  // Hauteur pour afficher exactement 2.5 POIs (basé sur la hauteur d'un POI ~50px)
+  height: 125px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+  padding-right: 4px; // Espace pour la scrollbar
+}
+
+/* Personnalisation de la scrollbar pour la liste des POIs */
+.pois-list-scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pois-list-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 0.25rem;
+}
+
+.pois-list-scrollable::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 0.25rem;
+}
+
+.pois-list-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.poi-preview-item {
+  display: flex;
+  gap: 0.5rem;
+  padding: 8px 6px;
+  min-height: 50px; // Hauteur consistante pour chaque POI
+  flex-shrink: 0; // Ne se contracte pas
+}
+
+.poi-number {
+  color: #161273;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.poi-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.poi-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  line-height: 1.2;
+}
+
+.poi-description {
+  font-size: 0.75rem;
+  color: #6c757d;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.card-actions .btn {
+  font-weight: 500;
+}
+
+/* Contrôles du carrousel */
+.carousel-control-prev,
+.carousel-control-next {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: #764ba2ad;
+  border-radius: 25%;
+  //color: #2c3e50;
+  color: white;
+  opacity: 1;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  //background: grey;
+  color: white;
+}
+
+/* Bouton de retour
+.back-button-container {
+  position: absolute;
+  text-align: center;
+//    margin-top: 1rem;
+}
+*/
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alternatives-carousel {
+    padding: 0.5rem;
+    max-height: 51vh;
   }
 
-  .custom-indicators button {
-    width: 15px;
-    height: 8px;
-    border-radius: 25%;
-    background-color: black;
-    margin: 0 4px;
-  }
-
-  .custom-indicators button.active {
-    background-color: #764ba2;
-  }
-
-  /* Cards d'itinéraires */
   .itinerary-card {
-    background: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  .card-header {
-    margin-bottom: 1rem;
-  }
-
-  .itinerary-theme {
-    font-size: 1.1rem;
-    font-weight: 600;
-    //color: #2c3e50;
-    margin-bottom: 0.5rem;
-    color: #1a1a1a;
-    //line-height: 24px;
+    margin: 0 0.25rem;
+    padding: 1rem;
   }
 
   .card-content {
-    margin-bottom: 1.5rem;
-  //  max-height: 200px;
+  min-height: 160px; // Hauteur réduite sur mobile
   }
 
-  .itinerary-description {
-    color: #6c757d;
-    margin-bottom: 1rem;
-    line-height: 1.4;
+  .pois-list-scrollable {
+    height: 110px; // Hauteur réduite pour afficher ~2.2 POIs sur mobile
   }
 
-  .pois-list {
-    display: flex;
-    flex-direction: column;
+  .spacer {
+    width: 50px; /* Largeur réduite sur mobile */
   }
 
-  .poi-preview-item {
-    display: flex;
-    gap: 0.5rem;
-    padding: 3px 6px;
+  .indicators-zone {
+    //padding: 0.4rem 0 0.6rem 0; /* Padding encore plus réduit sur mobile */
+    padding: 0.5rem 0 0 0; /* Padding encore plus réduit sur mobile */
   }
 
-  .poi-number {
-    color: #161273;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 600;
-    flex-shrink: 0;
+  .custom-indicators button {
+    width: 28px; /* Indicateurs un peu plus petits sur mobile */
+    height: 5px;
   }
 
-  .poi-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .poi-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #2c3e50;
-  }
-
-  .poi-description {
-    font-size: 0.75rem;
-    color: #6c757d;
-  }
-
-  .more-pois {
+  .carousel-subtitle {
     font-size: 0.8rem;
-    color: #6c757d;
-    font-style: italic;
-    margin-left: 2.75rem;
+    //padding: 0 0 0.5rem 0;
+    margin-top: 0.2rem;
   }
-
-  .card-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .card-actions .btn {
-    font-weight: 500;
-  }
-
-  /* Contrôles du carrousel */
-  .carousel-control-prev,
-  .carousel-control-next {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    background: #764ba2ad;
-    border-radius: 25%;
-    //color: #2c3e50;
-    color: white;
-    opacity: 1;
-  }
-
-  .carousel-control-prev:hover,
-  .carousel-control-next:hover {
-    //background: grey;
-    color: white;
-  }
-
-  /* Bouton de retour */
-  .back-button-container {
-    position: absolute;
-    text-align: center;
-//    margin-top: 1rem;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .alternatives-carousel {
-      padding: 0.5rem;
-      max-height: 70vh;
-    }
-
-    .itinerary-card {
-      margin: 0 0.25rem;
-      padding: 1rem;
-    }
-
-    .itinerary-stats {
-      justify-content: space-between;
-    }
-
-    .carousel-control-prev,
-    .carousel-control-next {
-      width: 35px;
-      height: 35px;
-    }
-  }
+}
