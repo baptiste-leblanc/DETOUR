@@ -55,21 +55,3 @@ input[type="radio"] {
   color: #00286A;
 }
 
-// glass-card-background {
-//   background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
-// }
-
-.liquid-glass-show {
-  // background: rgba(40, 79, 247, 0.6);
-  background: linear-gradient(180deg,
-    rgba(40, 79, 247, 0.5) 0%,
-    rgba(40, 79, 247, 0.7) 40%,
-    rgba(40, 79, 247, 0.8) 100% );
-
-  // backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(100px) saturate(180%);
-  border-radius: 1rem 1rem 0 0;
-  border: 1px solid rgba(22, 18, 115, 0.4);
-  box-shadow: 0 8px 32px rgba(22, 18, 115, 0.3);
-  overflow-y: visible;
-}

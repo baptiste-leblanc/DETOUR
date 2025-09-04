@@ -40,7 +40,7 @@ export default class extends Controller {
     this.map.on("load", () => {
       if (this.isHomeValue) {
         this.geolocate.trigger();
-        this.map.setZoom(15);
+        this.map.setZoom(12);
       } else {
         this.geolocate.trigger();
       }
@@ -167,11 +167,29 @@ export default class extends Controller {
     });
   }
 
+  getCategoryEmoji(category) {
+    const categoryEmojis = {
+      'Historical Sites': '🏛️',
+      'Culture & Arts': '🎭',
+      'Museums & Exhibitions': '🖼️',
+      'Religious': '⛪',
+      'Cafés & Bistros': '☕',
+      'Restaurants': '🍽️',
+      'Desserts & Pastry Shops': '🧁',
+      'Food Markets & Street Food': '🥘',
+      'Shopping & Leisure': '🛍️',
+      'Nature & Parks': '🌳',
+      'Knowledge & Institutions': '📚'
+    };
+
+    return categoryEmojis[category] || '📍';
+  }
+  
   createPopup(waypoint) {
     const categoryEmoji = this.getCategoryEmoji(waypoint.category);
 
     return new mapboxgl.Popup({
-      className: 'glass-popup',
+      className: 'glass-popup me-2',
       offset: 25,
       closeOnClick: true,
       closeButton: true
@@ -183,23 +201,6 @@ export default class extends Controller {
     `);
   }
 
-  getCategoryEmoji(category) {
-    const categoryEmojis = {
-      'Historical Sites': '🌍',
-      'Culture & Arts': '🎭',
-      'Museums & Exhibitions': '🖼️',
-      'Religious': '⛪',
-      'Cafés & Bistros': '☕',
-      'Restaurants': '🍽️',
-      'Desserts & Pastry Shops': '🍰',
-      'Food Markets & Street Food': '🛒',
-      'Shopping & Leisure': '🛍️',
-      'Nature & Parks': '🌳',
-      'Knowledge & Institutions': '📚'
-    };
-
-    return categoryEmojis[category] || '📍';
-  }
 
   fitMapBounds(geometry) {
     const bounds = new mapboxgl.LngLatBounds();
