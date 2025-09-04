@@ -13,8 +13,8 @@
 
     <div class="bg-white rounded-4 px-3 pt-3 pb-1">
     <div class="card-header">
-      <div class="sheet-header mb-1">🚶🏻‍➡️ <%= @itinerary.theme.capitalize %></div>
-      <p>⏳ <span class="duration"></span> → <span class="distance"></span></p>
+      <div class="sheet-header mb-1">🚶🏻‍➡️ <%= @itinerary.theme.capitalize.titleize %></div>
+      <p>⏳ <span class="duration"></span> ⬆️​ <span class="distance"></span></p>
     </div>
 
     <!-- Rappel Point de départ / Point d'arrivée ps-3 mt-1 mb-2 -->
@@ -28,7 +28,7 @@
       <p class="sheet-description mt-1">
         <%= @itinerary.description %>
       </p>
-          <div class="pois-list">
+          <div class="pois-list-scrollable">
 
 
       <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
