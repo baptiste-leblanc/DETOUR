@@ -1,49 +1,58 @@
 <div style="display: flex; flex-direction: column;">
+  <!-- Carte en arrière-plan (identique à best_itinerary) -->
   <div class="map-itinerary-container" style="flex-grow: 1">
     <%= render "shared/map", waypoints: @waypoints %>
   </div>
 
   <div class="liquid-glass z-2 fixed-bottom p-3 text.light">
 
+ <!-- Header du carrousel -->
   <div class="carousel-header">
     <h2 class="carousel-title">Best Itinerary</h2>
   </div>
 
     <div class="bg-white rounded-4 px-3 pt-3 pb-1">
     <div class="card-header">
-      <div class="sheet-header mb-1">🚶🏻‍➡️ <%= @itinerary.theme.titleize %></div>
+      <div class="sheet-header mb-1">🚶🏻‍➡️ <%= @itinerary.theme.capitalize %></div>
       <p>⏳ <span class="duration"></span> → <span class="distance"></span></p>
     </div>
 
+    <!-- Rappel Point de départ / Point d'arrivée ps-3 mt-1 mb-2 -->
     <div class="sheet-rappel border-top border-secondary border-1 pt-1">
       <%= render "shared/address", itinerary_objective: @itinerary_objective %>
     </div>
 
+
+ <!-- Description -->
     <div class="sheet-rappel border-top border-secondary border-1 pt-1 mb-1">
       <p class="sheet-description mt-1">
         <%= @itinerary.description %>
       </p>
-      <div class="pois-list">
-        <% @sorted_pois.each_with_index do |poi, poi_index| %>
-          <div class="poi-preview-item">
-            <span class="poi-number"><%= poi_index + 1 %></span>
-            <div class="poi-info">
-              <span class="poi-name"><%= poi.name %></span>
-              <span class="poi-description"><%= poi.description %></span>
-            </div>
+          <div class="pois-list">
+
+
+      <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
+        <div class="poi-preview-item">
+          <span class="poi-number"><%= poi_index + 1 %></span>
+          <div class="poi-info">
+            <span class="poi-name"><%= poi.name %></span>
+            <span class="poi-description"><%= poi.description %></span>
           </div>
-        <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    </div>
+          <div class="mt-2 mb-2">
+        <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-light rounded-4"%>
       </div>
     </div>
 
-    <div class="mt-2 mb-2">
-      <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-light rounded-4"%>
-    </div>
-    </div>
 
+    <!-- Bouton de retour -->
     <div class="button-container">
       <div class="d-flex mt-3 mb-2 gap-2">
-        <%= link_to "👈👈🏻 New itinerary", root_path, class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
+        <%= link_to "👈​👈🏻 New itinerary", root_path, class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
         <%= link_to "See alternatives", alternative_itinerary_itinerary_objective_itineraries_path(@itinerary_objective), class: "btn flex-fill", style: "background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-color: #a8edea;"%>
       </div>
     </div>
