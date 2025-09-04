@@ -33,12 +33,15 @@
         <nav class="opacity-0 z-n1 col-9 sidebar pt-3 bg-white h-100 position-absolute d-none" data-toggle-target="hideable" style="transition: opacity 0.3s ease-in-out">
           <%= render "shared/sidenav", itineraries: Itinerary.all %>
         </nav>
-        <div class="col-md-10 my-4">
+        <div class="", >
           <%= render "shared/flashes" %>
-          <%= link_to "#", class: "nav-link text-dark ps-0",
-                    data: {action: "click->toggle#call", toggle_target: "show"} do %>
-          <i class="fa-solid fa-bars"></i>
-          <% end %>
+          <button class="nav-toggle"
+                  data-action="click->toggle#call"
+                  data-toggle-target="show"
+                  aria-label="Toggle menu"
+                  type="button">
+              <span class="lines"></span>
+          </button>
       <% end %>
           <%= yield %>
 
