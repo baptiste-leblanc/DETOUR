@@ -1,8 +1,12 @@
 <div class="mb-0.5" style="font-size:1rem">
-  <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758384/location-arrow-light-full_wj5pnf.svg" alt="departure icone" style="height: 16px; width: auto;">
-   <%= itinerary_objective.departure_address["full_address"] %>
+  <div class="d-flex">
+    <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758384/location-arrow-light-full_wj5pnf.svg" alt="departure icone" style="height: 16px; width: auto;">
+    <p class="mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"> <%= itinerary_objective.departure_address["full_address"] %> </p>
+  </div>
 </div>
 <div style="font-size:1rem">
-  <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758381/location-dot-light-full_j9bzw9.svg" alt="arrival icone" style="height: 16px; width: auto;">
-   <%= itinerary_objective.arrival_address["full_address"] %>
+  <div class="d-flex">
+    <img src="https://res.cloudinary.com/da5svsbtg/image/upload/v1756758381/location-dot-light-full_j9bzw9.svg" alt="arrival icone" style="height: 16px; width: auto;">
+   <p class="mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis"> <%= itinerary_objective.arrival_address["full_address"] %> </p>
+  </div>
 </div>

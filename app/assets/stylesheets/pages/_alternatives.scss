@@ -36,12 +36,13 @@
   flex: 2; //1
   text-align: center;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 20px;
+  font-weight: 700 !important;
   line-height: 2.2rem;
+  color: #2D3A8C
   //font-weight: 600;
   //margin: 0;
   //color: #764ba2;
-  color: #ffffff;
 }
 
 .back-btn {
@@ -97,7 +98,7 @@
 
 .custom-indicators button.active {
   //background-color: #764ba2;
-  background-color: #ffffff;
+  background-color: #90c2ee;
   transform: scale(1.1);
 }
 
