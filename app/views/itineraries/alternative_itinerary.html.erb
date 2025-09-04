@@ -1,42 +1,48 @@
+<!-- Carte en arrière-plan (identique à best_itinerary) -->
+<div class="map-itinerary-container">
+  <%= render "shared/map", waypoints: @waypoints %>
+</div>
+
 <!-- Carrousel à la place du Bottom Sheet -->
 <div class="liquid-glass alternatives-carousel z-2">
 
-
-  <!-- Bouton de retour -->
-  <div class="back-button-container">
-    <%= link_to "👈🏻​  Back",
-        best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
-        class: "btn btn-light btn-sm" %>
-  </div>
-
   <!-- Header du carrousel -->
   <div class="carousel-header">
+    <!-- Bouton de retour -->
+    <div class="back-button-container">
+      <%= link_to "👈🏻​  Back",
+          best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
+          class: "btn btn-light btn-sm back-btn" %>
+    </div>
     <h2 class="carousel-title">Alternatives</h2>
+    <!-- pour équilibrer le title avec le CTA -->
+    <div class="spacer"></div>
   </div>
 
   <!-- Carrousel Bootstrap -->
-  <div id="alternativesCarousel" class="carousel slide " data-bs-interval="false" data-controller="carousel">
+  <div id="alternativesCarousel" class="carousel slide" data-bs-interval="false" data-controller="carousel">
 
     <!-- Contenu du carrousel -->
     <div class="carousel-inner">
       <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
         <div class="carousel-item <%= 'active' if index == 0 %>">
-          <div class="itinerary-card liquid-glass  z-2">
+          <div class="itinerary-card liquid-glass z-2">
 
             <!-- En-tête de la card -->
             <div class="card-header">
-              <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.capitalize %></h3>
-              <p>⏳ <span class="duration"></span> → <span class="distance"></span></p>
+              <!-- <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.capitalize %></h3> -->
+              <h3 class="itinerary-theme">🗺️ <%= itinerary.theme.split.map(&:capitalize).join(" ") %></h3>
+              <p class="duradist">⏳ <span class="duration"></span> ⬆️​ <span class="distance"></span></p>
             </div>
 
             <!-- Description -->
             <div class="card-content">
               <p class="itinerary-description"><%= itinerary.description %></p>
 
-              <!-- POIs preview (les 3 premiers) -->
+              <!-- POIs preview avec scroll -->
               <div class="pois-preview">
-                <div class="pois-list">
-                  <% itinerary.point_of_interests.limit(3).each_with_index do |poi, poi_index| %>
+                <div class="pois-list-scrollable">
+                  <% itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
                     <div class="poi-preview-item">
                       <span class="poi-number"><%= poi_index + 1 %></span>
                       <div class="poi-info">
@@ -45,17 +51,11 @@
                       </div>
                     </div>
                   <% end %>
-
-                  <% if itinerary.point_of_interests.count > 3 %>
-                    <div class="more-pois">
-                      +<%= itinerary.point_of_interests.count - 3 %> more outstanding stops 🤩
-                    </div>
-                  <% end %>
                 </div>
               </div>
             </div>
 
-            <!-- Boutons d'action -->
+            <!-- CTA Choose -->
             <div class="card-actions">
               <%= link_to "Choose this alternative",
                   itinerary_objective_itinerary_path(@itinerary_objective, itinerary),
@@ -66,35 +66,34 @@
       <% end %>
     </div>
 
+    <!-- <div class="d-flex justify-content-center mt-2"> -->
+      <!-- Contrôles de navigation
+      <button class="carousel-control-prev" type="button" data-bs-target="#alternativesCarousel" data-bs-slide="prev">
+        <i class="fas fa-chevron-left"></i>
+        <span class="visually-hidden">Previous</span>
+      </button>
+    -->
 
-<div class="d-flex justify-content-around mt-2">
-    <!-- Contrôles de navigation -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#alternativesCarousel" data-bs-slide="prev">
-      <i class="fas fa-chevron-left"></i>
-      <span class="visually-hidden">Previous</span>
-    </button>
-
-        <!-- Indicateurs -->
-    <div class="carousel-indicators custom-indicators flex-column">
-    <div class= "text-center">
-    <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
-        <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
-                class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
-        </button>
-      <% end %>
+    <!-- Indicateurs de navigation flex-column-->
+    <div class= "indicators-zone">
+      <div class="carousel-indicators custom-indicators">
+      <!-- <div class= "text-center"> -->
+        <div class= "indicators-row">
+          <% @itinerary_objective.itineraries.drop(1).each_with_index do |itinerary, index| %>
+            <button type="button" data-bs-target="#alternativesCarousel" data-bs-slide-to="<%= index %>"
+              class="<%= 'active' if index == 0 %>" aria-current="<%= 'true' if index == 0 %>">
+            </button>
+          <% end %>
+        </div>
+        <p class="carousel-subtitle">Swipe for different itineraries</p>
+      </div>
+      <!--
+      <button class="carousel-control-next" type="button" data-bs-target="#alternativesCarousel" data-bs-slide="next">
+        <i class="fas fa-chevron-right"></i>
+        <span class="visually-hidden">Next</span>
+      </button>
+      -->
     </div>
-      <p class="carousel-subtitle">Swipe for different itineraries</p>
-    </div>
+  </div> -->
 
-    <button class="carousel-control-next" type="button" data-bs-target="#alternativesCarousel" data-bs-slide="next">
-      <i class="fas fa-chevron-right"></i>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
-</div>
-
-</div>
-<!-- Carte en arrière-plan (identique à best_itinerary) -->
-<div class="map-itinerary-container">
-  <%= render "shared/map", waypoints: @waypoints %>
 </div>
