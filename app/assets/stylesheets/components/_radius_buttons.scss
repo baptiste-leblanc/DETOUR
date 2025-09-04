@@ -3,11 +3,19 @@
   width: 100%;
   height: 50px;
   border-radius: 0.5rem;
-  background-color: #00286A;
+  background-color: #1E2A78;
   font-weight: 600;
+  font-size: 18px;
+  text-align:center
 }
 
 .go:hover {
-  color: #ffffff;
-  background-color: #086264;
+  background-color: #2D3A8C; /* Bleu profond (plus clair que le normal) */
+  // transform: scale(1.05); /* Zoom léger */
+  color: white;
+}
+
+.go:active {
+  background-color: #16205C; /* Encore plus foncé pour le clic */
+  // transform: scale(0.98); /* Petit effet de "press" */
 }
