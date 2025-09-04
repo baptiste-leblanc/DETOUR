@@ -191,7 +191,7 @@ end
 
     Each object must contain:
     -theme_name (string): 3-5 words summarizing the essence of the itinerary
-    -theme_description (string): sentence of 20-30 words to sell the itinerary to the user explaining why this itenerary offers the most pleasant (trendy, photogenic, enjoyable...) trip .
+    -theme_description (string): sentence of 20-25 words to sell the itinerary to the user explaining why this itenerary offers the most pleasant (trendy, photogenic, enjoyable...) trip .
     -points_of_interest (array of 7–10 POI objects)
 
     Do not include any other keys, metadata, or comments.
@@ -228,12 +228,12 @@ end
         1. "POIs_collection" = array of 4 objects
           - Each object contains:
             - theme_name (string, 3–5 words)
-            - theme_description (string, one sentence, 20–30 words, explaining why this itinerary is enjoyable)
+            - theme_description (string, one sentence, 20–25 words, explaining why this itinerary is enjoyable)
             - poi_names (array of strings: names of all POIs in this theme)
         2. "New_POIs" = array of the extra POIs generated, each including:
             - name (string)
             - address (string)
-            - description (string, one sentence, 20–30 words, selling why it is enjoyable)
+            - description (string, one sentence, 20–25 words, selling why it is enjoyable)
             - category (string): one of the following: "Historical Sites", "Culture & Arts", "Museums & Exhibitions", "Religious", "Cafés & Bistros", "Restaurants", "Street Food & Poestry Shop", "Shopping & Leisure", "Nature & Parks", "Knowledge & Institutions"
       Rules:
       - Exactly 4 themes (no more, no less)
