@@ -9,20 +9,20 @@
 
   <div class="position-relative col-12 col-sm-4 z-2 glass-card-background pe-4" style="height: -webkit-fill-available;">
     <div class="py-5">
-      <div class="liquid-glass-show pb-5 p-3 fixed-bottom col-12 col-sm-4">
-        <div class="z-2 mb-3 px-3">
+      <div class="liquid-glass pb-3 p-3 fixed-bottom col-12 col-sm-4">
+        <div class="z-2 mb-3 px-3 text-center">
           <h5 class="text-white mb-3"><%= @itinerary.theme %></h5>
         </div>
 
-        <div class="p-4 bg-white rounded-4">
+        <div class="p-3 bg-white rounded-4">
           <div class="mb-3">
             <%= render "shared/address", itinerary_objective: @itinerary_objective %>
           </div>
 
           <div class="d-flex justify-content-between align-items-start">
             <div class="trip-info">
-              <h4 class="text-black my-3">⏳ <strong><span class="duration"></span></strong></h4>
-              <h5 class="text-black">↔️ / 🏁 <span class="distance"></span></h5>
+              <h5 class="text-black my-3">⏳ <strong><span class="duration"></span></strong></h5>
+              <h6 class="text-black">🏁 <span class="distance"></span></h6>
             </div>
 
             <div class="d-flex flex-column gap-2">
