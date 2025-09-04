@@ -295,21 +295,18 @@ end
 
   # Crée les addresses et points d'intérêt en db pour les nouveaux POIs
   pois_inside.each do |poi|
-    address = Address.find_or_create_by(
-      full_address: poi["location"]["full_address"]
-    ) do |a|
-      a.latitude = poi["location"]["latitude"]
-      a.longitude = poi["location"]["longitude"]
-      a.address_type = "poi"
-    end
+    # 1️⃣ Trouve ou crée l'adresse
+    address = Address.find_or_initialize_by(full_address: poi["location"]["full_address"])
+    address.latitude = poi["location"]["latitude"]
+    address.longitude = poi["location"]["longitude"]
+    address.address_type ||= "poi" # ne modifie pas si déjà défini
+    address.save! # enregistre ou met à jour
 
-    PointOfInterest.find_or_create_by(
-      name: poi["name"],
-      address: address
-    ) do |poi_record|
-      poi_record.description = poi["description"]
-      poi_record.category = poi["category"]
-    end
+    # 2️⃣ Trouve ou crée le POI
+    poi_record = PointOfInterest.find_or_initialize_by(name: poi["name"], address_id: address.id)
+    poi_record.description = poi["description"]
+    poi_record.category = poi["category"]
+    poi_record.save!
   end
 
 
@@ -370,10 +367,10 @@ end
   target_duration = duration_objective + itinerary_duration(departure, arrival)
   current_duration = total_duration(departure, arrival, poi_coord)
 
-  return poi_coord if current_duration - target_duration <= 1
+  return poi_coord if current_duration - target_duration <= 5
 
   # Tant que trop long
-  while current_duration - target_duration > 1 && poi_coord.any?
+  while current_duration - target_duration > 5 && poi_coord.any?
     # Supprime le POI qui augmente le moins la durée totale (ou random si tu veux)
     poi_to_remove = poi_coord.min_by do |poi|
       total_duration(departure, arrival, poi_coord - [poi])

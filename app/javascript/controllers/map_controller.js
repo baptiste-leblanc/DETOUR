@@ -4,7 +4,8 @@ export default class extends Controller {
   static values = {
     apiKey: String,
     waypoints: { type: Array, default: [] },
-    currentItineraryIndex: Number
+    currentItineraryIndex: Number,
+    isHome: { type: Boolean, default: false }
   }
 
   connect() {
@@ -37,7 +38,12 @@ export default class extends Controller {
     this.map.addControl(this.geolocate);
 
     this.map.on("load", () => {
-      // this.geolocate.trigger();
+      if (this.isHomeValue) {
+        this.geolocate.trigger();
+        this.map.setZoom(15);
+      } else {
+        this.geolocate.trigger();
+      }
       this.renderRoute();
     });
   }
@@ -49,7 +55,6 @@ export default class extends Controller {
     }
   }
 
-  // Stimulus callback: triggered whenever currentItineraryIndexValue changes
   currentItineraryIndexValueChanged() {
     if (this.map && this.map.isStyleLoaded()) {
       this.renderRoute();
@@ -197,8 +202,10 @@ export default class extends Controller {
   }
 
   fitMapBounds(geometry) {
+    const bottomSheet = document.querySelector(".liquid-glass")
+
     const bounds = new mapboxgl.LngLatBounds();
     geometry.coordinates.forEach(coordinate => bounds.extend(coordinate));
-    this.map.fitBounds(bounds, { padding: 120 });
+    this.map.fitBounds(bounds, { padding: { top:50, right: 50, left: 50, bottom: bottomSheet.clientHeight + 20 } });
   }
 }
