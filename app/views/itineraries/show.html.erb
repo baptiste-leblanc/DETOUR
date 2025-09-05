@@ -16,28 +16,26 @@
 
         <div class="p-3 bg-white rounded-4">
           <div class="mb-3">
-            <%= render "shared/address", itinerary_objective: @itinerary_objective %>
             <div class="d-flex my-2 gap-2">
-              <h6 class="text-black">🏁 <span class="distance"></span></h6>
               <h5 class="text-black">⏳ <span class="duration"></span></h5>
+              <h5 class="text-black">⬆️ <span class="distance"></span></h5>
             </div>
+            <%= render "shared/address", itinerary_objective: @itinerary_objective %>
           </div>
 
-          <div class="d-flex gap-3">
+          <div class="d-flex justify-content-between gap-1">
+            <%= link_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
+              class: "btn p-2 px-4 rounded-4 text-black text-decoration-none",
+              style: "background: white; border:2px solid #2D3A8C; color: #2D3A8C" do %>
+            Change Detour
+            <% end %>
 
-            <div class="d-flex justify-content-between">
-              <%= link_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
-                  class: "btn p-2 rounded-4 text-black text-decoration-none",
-                  style: "background: white; border:2px solid #2D3A8C; color: #2D3A8C" do %>
-                Change my Detour
-              <% end %>
-              <%= link_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
-                  class: "btn p-2 rounded-4 text-white text-decoration-none",
-                  style: "background:#2D3A8C; color: white" do %>
-                <strong>New itinerary</strong>
-              <% end %>
+            <%= link_to best_itinerary_itinerary_objective_itineraries_path(@itinerary_objective),
+              class: "btn p-2 px-4 rounded-4 text-white text-decoration-none",
+              style: "background:#2D3A8C; color: white" do %>
+            <strong>New Itinerary</strong>
+            <% end %>
             </div>
-          </div>
 
 
         </div>
