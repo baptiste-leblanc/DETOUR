@@ -1,3 +1,4 @@
+/* Animated hamburger menu styles */
 .nav-toggle {
   margin-top: 10px;
   background: white;
@@ -74,22 +75,4 @@
 
 .nav-visible .nav-toggle .lines:before {
   transform: rotate3d(0, 0, 1, -45deg);
-}
-
-.navbar-lewagon {
-  position: fixed !important; // force l’écrasement de bootstrap
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1030; // Bootstrap met les navbars à 1030
-  background-color: white;
-}
-
-body {
-  padding-top: 70px; // ajuste à la hauteur de ta nav
-}
-
-html, body {
-  height: 100%;
-  overflow-x: hidden;
 }
