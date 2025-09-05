@@ -1,8 +1,16 @@
-<ul class="position-sticky sticky-top nav flex-column" style="padding-top: 60px">
-  <% itineraries.each do |itinerary| %>
-    <li class="nav-item">
-      <p><%= itinerary.theme %></p>
-    </li>
-  <% end %>
-</ul>
-<div class="black-wall"></div>
+<div class="sidebar-menu">
+  <ul class="nav flex-column">
+    <% itineraries.each do |itinerary| %>
+      <li class="nav-item">
+        <p>
+          <%= link_to itinerary.theme.titleize,
+            itinerary_objective_itinerary_path(
+              ItineraryObjective.find(itinerary["itinerary_objective_id"]),
+              itinerary
+            )
+          %>
+        </p>
+      </li>
+    <% end %>
+  </ul>
+</div>
