@@ -13,6 +13,7 @@
   max-width: 100%;
 }
 
+
 // Amélioration pour le swipe
 .swipeable-carousel {
   touch-action: pan-y; // Permet le scroll vertical mais capture les mouvements horizontaux
@@ -26,6 +27,7 @@
   &:active {
     cursor: grabbing;
   }
+
 }
 
 //.carousel-header-aligned
@@ -154,6 +156,7 @@
 
   //transform: scale(1.15); /* Légèrement plus grand quand actif */
   //box-shadow: 0 2px 8px rgba(45, 58, 140, 0.3); /* Ombre pour l'indicateur actif */
+
 }
 
 
