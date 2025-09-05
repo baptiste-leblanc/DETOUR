@@ -4,11 +4,11 @@
     <%= render "shared/map", waypoints: @waypoints %>
   </div>
 
-  <div class="liquid-glass z-2 fixed-bottom p-3 text.light">
+  <div class="liquid-glass z-2 fixed-bottom p-3  text.light">
 
  <!-- Header du carrousel -->
   <div class="carousel-header">
-    <h2 class="carousel-title">Best Itinerary</h2>
+    <h2 class="carousel-title">BEST ITINERARY</h2>
   </div>
 
     <div class="bg-white rounded-4 px-3 pt-3 pb-1">
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Rappel Point de départ / Point d'arrivée ps-3 mt-1 mb-2 -->
-    <div class="sheet-rappel border-top border-secondary border-1 pt-1">
+    <div class="sheet-rappel border-top border-secondary border-1 pt-2">
       <%= render "shared/address", itinerary_objective: @itinerary_objective %>
     </div>
 
@@ -28,7 +28,7 @@
       <p class="sheet-description mt-1">
         <%= @itinerary.description %>
       </p>
-          <div class="pois-list-scrollable">
+      <div class="pois-list-scrollable">
 
 
       <% @itinerary.point_of_interests.each_with_index do |poi, poi_index| %>
@@ -40,11 +40,11 @@
           </div>
         </div>
       <% end %>
-    </div>
+      </div>
 
     </div>
-          <div class="mt-2 mb-2">
-        <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn btn-light rounded-4"%>
+      <div class="d-flex justify-content-end mt-2 mb-2">
+        <%= link_to "GO", itinerary_objective_itinerary_path(@itinerary_objective, @itinerary), class: "go btn rounded-4 mt-2"%>
       </div>
     </div>
 
