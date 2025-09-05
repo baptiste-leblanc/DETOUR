@@ -1,0 +1,20 @@
+.sidebar-menu {
+  position: sticky;
+  top: 60px;              // hauteur de ta navbar
+  max-height: calc(100vh - 60px); // hauteur totale dispo sous la navbar
+  overflow-y: auto;       // active la scroll bar uniquement si besoin
+  background: white;      // évite l’effet de superposition/transparence
+}
+
+.sidebar-menu a {
+  color: inherit;           // hérite de la couleur du parent
+  text-decoration: none;    // enlève le soulignement
+  display: block;           // élargit le lien au bloc (meilleur pour le clic tactile)
+  padding: 0.5rem 1rem;     // optionnel : ajoute de l’espace cliquable
+}
+
+.sidebar-menu a:hover {
+  color: #33b6e4;         // couleur au survol
+//  color: #2D3A8C;
+  text-decoration: none;    // reste sans soulignement
+}
